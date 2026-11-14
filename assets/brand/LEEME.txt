@@ -1,0 +1,1 @@
+Pon aquí el LOGO ORIGINAL de Thriver Care, PNG transparente o SVG original, llamándolo `thriver-logo.png` o `thriver-logo.svg`. NO crees un archivo vacío ni metas capturas de pantalla del logo. Si falta, Codex debe usar texto hasta que lo aportes.

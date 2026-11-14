@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "fastapi",
+  "buildCommand": "npm --prefix regionDashboard ci --include=dev --no-audit --no-fund && npm --prefix regionDashboard run build",
+  "functions": {
+    "app.py": {
+      "maxDuration": 60,
+      "excludeFiles": "{docs/**,tests/**,deliverables/**,assets/references/**,scripts/**}"
+    }
+  }
+}

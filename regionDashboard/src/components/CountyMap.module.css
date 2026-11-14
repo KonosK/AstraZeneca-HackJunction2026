@@ -1,0 +1,125 @@
+.panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.metricLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.metricLabel select {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  background: #fff;
+  color: var(--ink);
+  max-width: 220px;
+}
+
+.mapWrap {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 45% 18%, rgba(31, 111, 106, 0.09), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(232, 240, 236, 0.65));
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.county {
+  cursor: pointer;
+  transition: filter 120ms ease, stroke-width 120ms ease, opacity 120ms ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.county:hover,
+.county:focus-visible {
+  filter: brightness(1.1);
+  stroke-width: 1.6px;
+  outline: none;
+}
+
+.countySelected {
+  filter: brightness(1.05);
+  stroke-width: 1.8px !important;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.legendBar {
+  height: 10px;
+  width: 140px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgb(42, 92, 104),
+    rgb(58, 124, 118),
+    rgb(120, 148, 98),
+    rgb(186, 140, 72),
+    rgb(176, 84, 58)
+  );
+}
+
+.legendScale {
+  display: flex;
+  justify-content: space-between;
+  width: 140px;
+  font-variant-numeric: tabular-nums;
+}
+
+.state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--ink-muted);
+  background: rgba(244, 247, 245, 0.7);
+  z-index: 2;
+}

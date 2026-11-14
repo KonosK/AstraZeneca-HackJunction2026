@@ -1,0 +1,9 @@
+{
+  "tts_status": 502,
+  "tts_bytes": 91,
+  "stt_status": null,
+  "provider_auth_http": 400,
+  "provider_auth_status": "api_key_id_used_as_api_key",
+  "stt_live": "not attempted after confirmed authentication rejection",
+  "credit_balance": "unverified"
+}

@@ -1,0 +1,7 @@
+{
+  "application_http_status": 503,
+  "result": {
+    "detail": "ElevenLabs received a key ID instead of the secret key. Create a new API key in ElevenLabs and copy its full secret value, then update ELEVENLABS_API_KEY in the backend and restart Python. Text and the demo sample still work"
+  },
+  "paid_audio_calls": 0
+}

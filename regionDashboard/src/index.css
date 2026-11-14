@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap");
+
+:root {
+  --font-display: "Source Serif 4", Georgia, serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+
+  --bg-deep: #0f2428;
+  --bg-panel: #f4f7f5;
+  --bg-card: rgba(255, 255, 255, 0.82);
+  --bg-sidebar: #132e33;
+  --bg-sidebar-elevated: #1a3c42;
+
+  --ink: #152428;
+  --ink-muted: #4a5f63;
+  --ink-faint: #7a8e92;
+  --on-dark: #e8f2f0;
+  --on-dark-muted: #9cb4b8;
+
+  --accent: #1f6f6a;
+  --accent-strong: #0f524e;
+  --accent-soft: #d5ebe8;
+  --warn: #b45a2e;
+  --ok: #2f7a52;
+  --danger: #a33b3b;
+  --focus: #c9a227;
+
+  --border: rgba(21, 36, 40, 0.12);
+  --border-strong: rgba(21, 36, 40, 0.22);
+  --shadow: 0 10px 30px rgba(15, 36, 40, 0.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  --map-empty: #c5d2d0;
+  --map-stroke: #0f2428;
+  --sidebar-width: 220px;
+  --inspector-width: 360px;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(31, 111, 106, 0.18), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(180, 90, 46, 0.1), transparent 50%),
+    linear-gradient(160deg, #e6efec 0%, #f4f7f5 42%, #e9eee8 100%);
+  background-attachment: fixed;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: 100%;
+  height: 100%;
+}
+
+.app-shell.no-sidebar {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  padding: 12px 16px 16px;
+}
+
+.map-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) var(--inspector-width);
+  gap: 12px;
+  align-items: stretch;
+  flex: 0 0 auto;
+  /* Map-first hero: nearly full viewport so Finland isn’t cropped */
+  height: calc(100dvh - 28px);
+  min-height: 460px;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.panel-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+.faint {
+  color: var(--ink-faint);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge-validated {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.badge-projection {
+  background: #f3e6d8;
+  color: #7a3e1d;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e4ebe9 25%, #f3f7f6 50%, #e4ebe9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --sidebar-width: 190px;
+    --inspector-width: 320px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .map-workspace {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .map-workspace > :first-child {
+    height: calc(100dvh - 24px);
+    min-height: 420px;
+  }
+
+  .map-workspace > :last-child {
+    height: auto;
+    max-height: 38vh;
+  }
+}

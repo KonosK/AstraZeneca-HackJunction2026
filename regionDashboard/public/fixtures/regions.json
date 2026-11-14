@@ -1,0 +1,425 @@
+{
+  "recordedAt": "2026-11-14",
+  "label": "DEMO FIXTURE \u2014 NOT LIVE MODEL RESPONSE",
+  "request": null,
+  "response": {
+    "count": 23,
+    "year": 2024,
+    "regions": [
+      {
+        "region_id": 956,
+        "region_name": "\u00c5land",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": null,
+          "gp_wait_over_3mo_pct": null,
+          "gp_outpatient_visits_per_1000": 5130.0,
+          "morbidity_index_age_std": 67.7,
+          "higher_education_pct": 31.5,
+          "pop_75plus_living_alone_pct": 40.8,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 80.2,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": null,
+          "cancer_index_age_std": 116.7
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 957,
+        "region_name": "South Karelia wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 47.7,
+          "gp_wait_over_3mo_pct": 0.0,
+          "gp_outpatient_visits_per_1000": 6126.0,
+          "morbidity_index_age_std": 103.8,
+          "higher_education_pct": 29.3,
+          "pop_75plus_living_alone_pct": 47.1,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 75.8,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 83.2,
+          "cancer_index_age_std": 97.2
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 958,
+        "region_name": "South Ostrobothnia wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 38.6,
+          "gp_wait_over_3mo_pct": 0.0,
+          "gp_outpatient_visits_per_1000": 6458.0,
+          "morbidity_index_age_std": 107.4,
+          "higher_education_pct": 27.5,
+          "pop_75plus_living_alone_pct": 42.2,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 82.3,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 85.0,
+          "cancer_index_age_std": 103.6
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 959,
+        "region_name": "South Savo wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 50.0,
+          "gp_wait_over_3mo_pct": 0.6,
+          "gp_outpatient_visits_per_1000": 6394.0,
+          "morbidity_index_age_std": 108.4,
+          "higher_education_pct": 27.8,
+          "pop_75plus_living_alone_pct": 47.3,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 82.3,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 82.2,
+          "cancer_index_age_std": 101.8
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 960,
+        "region_name": "City of Helsinki",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 66.5,
+          "gp_wait_over_3mo_pct": 1.9,
+          "gp_outpatient_visits_per_1000": 9123.0,
+          "morbidity_index_age_std": 88.3,
+          "higher_education_pct": 46.2,
+          "pop_75plus_living_alone_pct": 51.2,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 71.4,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 74.3,
+          "cancer_index_age_std": 103.4
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 961,
+        "region_name": "East Uusimaa wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 49.7,
+          "gp_wait_over_3mo_pct": 0.1,
+          "gp_outpatient_visits_per_1000": 4342.0,
+          "morbidity_index_age_std": 87.9,
+          "higher_education_pct": 33.2,
+          "pop_75plus_living_alone_pct": 41.5,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 75.7,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 79.8,
+          "cancer_index_age_std": 103.1
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 962,
+        "region_name": "Kainuu wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 27.1,
+          "gp_wait_over_3mo_pct": 0.0,
+          "gp_outpatient_visits_per_1000": 7383.0,
+          "morbidity_index_age_std": 109.2,
+          "higher_education_pct": 26.8,
+          "pop_75plus_living_alone_pct": 46.1,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 78.5,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 84.1,
+          "cancer_index_age_std": 79.4
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 963,
+        "region_name": "Kanta-H\u00e4me wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 50.8,
+          "gp_wait_over_3mo_pct": 0.1,
+          "gp_outpatient_visits_per_1000": 5614.0,
+          "morbidity_index_age_std": 103.8,
+          "higher_education_pct": 30.0,
+          "pop_75plus_living_alone_pct": 44.8,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 70.4,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 83.4,
+          "cancer_index_age_std": 103.2
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 964,
+        "region_name": "Central Ostrobothnia wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 65.0,
+          "gp_wait_over_3mo_pct": 0.0,
+          "gp_outpatient_visits_per_1000": 5712.0,
+          "morbidity_index_age_std": 101.4,
+          "higher_education_pct": 27.7,
+          "pop_75plus_living_alone_pct": 39.0,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 69.2,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 85.4,
+          "cancer_index_age_std": 99.1
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 965,
+        "region_name": "Central Finland wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 55.2,
+          "gp_wait_over_3mo_pct": 1.6,
+          "gp_outpatient_visits_per_1000": 4929.0,
+          "morbidity_index_age_std": 104.4,
+          "higher_education_pct": 32.3,
+          "pop_75plus_living_alone_pct": 44.6,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 70.7,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 85.1,
+          "cancer_index_age_std": 92.5
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 966,
+        "region_name": "Central Uusimaa wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 32.8,
+          "gp_wait_over_3mo_pct": 0.0,
+          "gp_outpatient_visits_per_1000": 5203.0,
+          "morbidity_index_age_std": 96.1,
+          "higher_education_pct": 32.9,
+          "pop_75plus_living_alone_pct": 43.5,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 75.9,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 80.5,
+          "cancer_index_age_std": 96.9
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 967,
+        "region_name": "Kymenlaakso wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 47.8,
+          "gp_wait_over_3mo_pct": 0.0,
+          "gp_outpatient_visits_per_1000": 4526.0,
+          "morbidity_index_age_std": 108.1,
+          "higher_education_pct": 27.9,
+          "pop_75plus_living_alone_pct": 47.1,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 76.5,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 82.0,
+          "cancer_index_age_std": 100.1
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 968,
+        "region_name": "Lapland wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 39.5,
+          "gp_wait_over_3mo_pct": 0.6,
+          "gp_outpatient_visits_per_1000": 6041.0,
+          "morbidity_index_age_std": 110.6,
+          "higher_education_pct": 29.2,
+          "pop_75plus_living_alone_pct": 45.4,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 79.9,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 83.8,
+          "cancer_index_age_std": 89.9
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 969,
+        "region_name": "West Uusimaa wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 36.3,
+          "gp_wait_over_3mo_pct": 0.1,
+          "gp_outpatient_visits_per_1000": 4446.0,
+          "morbidity_index_age_std": 83.7,
+          "higher_education_pct": 42.6,
+          "pop_75plus_living_alone_pct": 41.9,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 73.6,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 76.1,
+          "cancer_index_age_std": 100.7
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 970,
+        "region_name": "Pirkanmaa wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 38.4,
+          "gp_wait_over_3mo_pct": 0.3,
+          "gp_outpatient_visits_per_1000": 5409.0,
+          "morbidity_index_age_std": 101.8,
+          "higher_education_pct": 35.6,
+          "pop_75plus_living_alone_pct": 45.3,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 71.5,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 83.5,
+          "cancer_index_age_std": 103.6
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 971,
+        "region_name": "Ostrobothnia wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 43.8,
+          "gp_wait_over_3mo_pct": 0.5,
+          "gp_outpatient_visits_per_1000": 5373.0,
+          "morbidity_index_age_std": 88.7,
+          "higher_education_pct": 32.7,
+          "pop_75plus_living_alone_pct": 39.6,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 72.4,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 84.9,
+          "cancer_index_age_std": 107.3
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 972,
+        "region_name": "North Karelia wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 21.1,
+          "gp_wait_over_3mo_pct": 0.1,
+          "gp_outpatient_visits_per_1000": 5671.0,
+          "morbidity_index_age_std": 111.1,
+          "higher_education_pct": 28.7,
+          "pop_75plus_living_alone_pct": 46.1,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 68.0,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 84.2,
+          "cancer_index_age_std": 92.9
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 973,
+        "region_name": "North Ostrobothnia wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 60.9,
+          "gp_wait_over_3mo_pct": 3.7,
+          "gp_outpatient_visits_per_1000": 4946.0,
+          "morbidity_index_age_std": 113.7,
+          "higher_education_pct": 32.1,
+          "pop_75plus_living_alone_pct": 42.5,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 73.6,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 85.6,
+          "cancer_index_age_std": 97.8
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 974,
+        "region_name": "North Savo wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 57.9,
+          "gp_wait_over_3mo_pct": 0.7,
+          "gp_outpatient_visits_per_1000": 6296.0,
+          "morbidity_index_age_std": 115.1,
+          "higher_education_pct": 30.7,
+          "pop_75plus_living_alone_pct": 44.9,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 70.0,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 85.1,
+          "cancer_index_age_std": 93.4
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 975,
+        "region_name": "P\u00e4ij\u00e4t-H\u00e4me wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 34.3,
+          "gp_wait_over_3mo_pct": 0.1,
+          "gp_outpatient_visits_per_1000": 4509.0,
+          "morbidity_index_age_std": 101.6,
+          "higher_education_pct": 29.0,
+          "pop_75plus_living_alone_pct": 47.9,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 68.9,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 81.8,
+          "cancer_index_age_std": 102.9
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 976,
+        "region_name": "Satakunta wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 31.8,
+          "gp_wait_over_3mo_pct": 0.3,
+          "gp_outpatient_visits_per_1000": 6378.0,
+          "morbidity_index_age_std": 98.7,
+          "higher_education_pct": 27.7,
+          "pop_75plus_living_alone_pct": 45.1,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 71.3,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 84.9,
+          "cancer_index_age_std": 105.0
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 977,
+        "region_name": "Vantaa and Kerava wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 70.4,
+          "gp_wait_over_3mo_pct": 3.0,
+          "gp_outpatient_visits_per_1000": 7995.0,
+          "morbidity_index_age_std": 91.5,
+          "higher_education_pct": 31.6,
+          "pop_75plus_living_alone_pct": 44.7,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 70.7,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 76.7,
+          "cancer_index_age_std": 100.7
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      },
+      {
+        "region_id": 978,
+        "region_name": "Southwest Finland wellbeing services county",
+        "year": 2024,
+        "indicators": {
+          "gp_wait_over_7d_pct": 39.5,
+          "gp_wait_over_3mo_pct": 0.1,
+          "gp_outpatient_visits_per_1000": 5405.0,
+          "morbidity_index_age_std": 102.3,
+          "higher_education_pct": 33.5,
+          "pop_75plus_living_alone_pct": 45.3,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 77.6,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 82.7,
+          "cancer_index_age_std": 101.9
+        },
+        "source": "THL Sotkanet / Finnish Cancer Registry (clean_cancer_training_data.csv)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "passed": [
+    "Baseline continuously reaches day 78; play/pause works without repeated next-event clicks",
+    "One patient confirmation validates provenance/conflicts, calls the real API and submits the local review",
+    "Clinician selects proposals; acceptance is a single explicit local decision and resumes to day 32",
+    "Four routes at 1440, 1280 and 390 px; consistent navigation, compact layouts and map-side actions",
+    "Correcting submitted intake invalidates prior analysis, clinician approval and local submission",
+    "Missing/rejected voice key and provider failure retain text and preset fallback",
+    "Microphone denial and generated-audio \u2192 mocked STT \u2192 editable reply are handled without paid calls",
+    "Backend outage is explicit; exact-preset recorded replay works only after opt-in",
+    "Reset clears the shared case, analysis, selected proposals and review"
+  ],
+  "console_errors": []
+}

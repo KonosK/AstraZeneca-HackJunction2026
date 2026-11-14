@@ -1,0 +1,1 @@
+En el repositorio real de tu compañero crea una carpeta `dashboard-source` y copia DENTRO su código fuente (descomprimido), incluidos package.json, src/, public/ y demás. No introduzcas node_modules, .next, dist, .env, claves ni otra carpeta .git. Si el repo ya trae un dashboard, no dupliques nada: dile a Codex dónde está.

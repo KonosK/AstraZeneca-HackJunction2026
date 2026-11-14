@@ -1,0 +1,184 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.meta {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.body {
+  padding: 12px 16px 18px;
+  overflow: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.empty {
+  padding: 28px 18px;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.sectionTitle {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.compareCard {
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border);
+}
+
+.compareValue {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 650;
+}
+
+.gap {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.strategyNote {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--ink-muted);
+}
+
+.shapList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shapItem {
+  display: grid;
+  gap: 4px;
+}
+
+.shapMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.shapBars {
+  position: relative;
+  height: 8px;
+  background: rgba(21, 36, 40, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.shapFill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.shapPos {
+  background: var(--warn);
+}
+
+.shapNeg {
+  background: var(--accent);
+}
+
+.adverse {
+  color: var(--danger);
+  font-weight: 600;
+  font-size: 0.68rem;
+}
+
+.strategy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.strategyCard {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+.priority {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--bg-deep);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.action {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.actor {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.driverTag {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.justification {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  line-height: 1.35;
+}
+
+.impact {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}

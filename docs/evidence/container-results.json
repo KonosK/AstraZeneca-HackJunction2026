@@ -1,0 +1,17 @@
+{
+  "image": "thriver-care:demo",
+  "checks": [
+    "/simulation 200",
+    "/patient 200",
+    "/doctor 200",
+    "/dashboard 200",
+    "/finland-wellbeing-counties.geojson 200",
+    "/brand/thriver-logo.svg 200",
+    "/fixtures/patient.json 200",
+    "/analyze/region live 200",
+    "/analyze/patient live 200",
+    "no-key voice: explicit 503 text fallback",
+    "unauthenticated request 401",
+    "model health ok; 23 counties"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "service": "OncoFlow API",
+  "version": "1.0.0",
+  "model": {
+    "artifact_path": "/workspace/Thriver-Care-Junction2026/mlBackend/artifacts/oncoflow_bundle.joblib",
+    "best_model": "RandomForestRegressor",
+    "target": "cancer_index_age_std",
+    "features": [
+      "gp_wait_over_7d_pct",
+      "gp_wait_over_3mo_pct",
+      "gp_outpatient_visits_per_1000",
+      "higher_education_pct",
+      "pop_75plus_living_alone_pct",
+      "pop_75plus_rai_assessed_pct",
+      "cr_3620_proportion_of_women_invited_to_cervical_cance",
+      "cr_3621_proportion_of_women_invited_to_breast_cancer_"
+    ],
+    "n_counties": 23,
+    "cv": {
+      "best_model": "RandomForestRegressor",
+      "mae_mean": 4.669205999999993,
+      "mae_std": 1.306692622560489,
+      "rmse_mean": 6.296502090961064,
+      "r2_mean": -0.13815145735811496
+    }
+  }
+}

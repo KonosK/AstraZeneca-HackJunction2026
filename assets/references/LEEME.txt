@@ -1,0 +1,1 @@
+Pon aquí la CAPTURA ORIGINAL de la barra/burbuja de navegación flotante, llamándola `floating-bubble-reference.png`. Si también tienes capturas REALES de Maisa, añádelas aquí con nombres `maisa-real-01.png` etc. No uses collages generados como referencias reales.

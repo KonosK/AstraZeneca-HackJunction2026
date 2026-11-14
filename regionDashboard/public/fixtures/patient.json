@@ -1,0 +1,437 @@
+{
+  "recordedAt": "2026-11-14",
+  "label": "DEMO FIXTURE \u2014 NOT LIVE MODEL RESPONSE",
+  "request": {
+    "patient_id": "SYNTH-LAPLAND-001",
+    "region_name": "Lapland wellbeing services county",
+    "age": 78,
+    "symptom_severity_score": 7,
+    "public_care_track": true,
+    "already_referred_to_specialist": false,
+    "needs_interpreter": false,
+    "care_phase": "primary_care",
+    "g8_frailty_score": null,
+    "missing_staging_fields": [],
+    "sex": "male",
+    "primary_symptom_cluster": "respiratory",
+    "smoking_status": "former",
+    "education_band": "unknown",
+    "symptom_onset_days": 60,
+    "travel_time_to_care_minutes": 95,
+    "lives_alone": true,
+    "language": "fi",
+    "comorbidity_flags": []
+  },
+  "response": {
+    "predictions_and_gaps": {
+      "patient_id": "SYNTH-LAPLAND-001",
+      "region_id": 968,
+      "region_name": "Lapland wellbeing services county",
+      "year": 2024,
+      "intake": {
+        "patient_id": "SYNTH-LAPLAND-001",
+        "age": 78.0,
+        "public_care_track": true,
+        "symptom_severity_score": 7.0,
+        "g8_frailty_score": null,
+        "missing_staging_fields": [],
+        "sex": "male",
+        "symptom_onset_days": 60.0,
+        "primary_symptom_cluster": "respiratory",
+        "smoking_status": "former",
+        "lives_alone": true,
+        "travel_time_to_care_minutes": 95.0,
+        "needs_interpreter": false,
+        "education_band": "unknown",
+        "already_referred_to_specialist": false,
+        "care_phase": "primary_care",
+        "language": "fi",
+        "comorbidity_flags": [],
+        "agent_confidence": null
+      },
+      "blind_spots": [
+        "g8_frailty_score",
+        "education_band"
+      ],
+      "pathway_days_estimate": {
+        "patient_days": 60.5,
+        "primary_care_days": 45.5,
+        "specialist_care_days": 66.1,
+        "total_days": 172.1,
+        "benchmark_total_days": 155.0,
+        "excess_vs_benchmark_days": 17.1
+      },
+      "pathway_evidence_class": "calibrated_projection",
+      "county_context": {
+        "observed_cancer_index_age_std": 89.9,
+        "observed_evidence_class": "validated_thl_fcr",
+        "predicted_cancer_index_age_std": 92.3285,
+        "predicted_evidence_class": "calibrated_projection",
+        "indicators": {
+          "gp_wait_over_7d_pct": 39.5,
+          "gp_wait_over_3mo_pct": 0.6,
+          "gp_outpatient_visits_per_1000": 6041.0,
+          "morbidity_index_age_std": 110.6,
+          "higher_education_pct": 29.2,
+          "pop_75plus_living_alone_pct": 45.4,
+          "pop_75plus_rai_assessed_pct": null,
+          "cr_3620_proportion_of_women_invited_to_cervical_cance": 79.9,
+          "cr_3621_proportion_of_women_invited_to_breast_cancer_": 83.8,
+          "cancer_index_age_std": 89.9
+        }
+      },
+      "gap_vs_kuitunen_total_days": 17.1
+    },
+    "contributing_factors": {
+      "county_shap_drivers": [
+        {
+          "feature": "cr_3621_proportion_of_women_invited_to_breast_cancer_",
+          "value": 83.8,
+          "shap_value": -6.008911926526025,
+          "abs_shap": 6.008911926526025,
+          "national_median": 83.45,
+          "adverse_direction": false,
+          "family": "screening_invitation"
+        },
+        {
+          "feature": "pop_75plus_living_alone_pct",
+          "value": 45.4,
+          "shap_value": -1.4339526080447698,
+          "abs_shap": 1.4339526080447698,
+          "national_median": 44.9,
+          "adverse_direction": true,
+          "family": "living_alone_75plus"
+        },
+        {
+          "feature": "cr_3620_proportion_of_women_invited_to_cervical_cance",
+          "value": 79.9,
+          "shap_value": -0.5651827398692926,
+          "abs_shap": 0.5651827398692926,
+          "national_median": 73.6,
+          "adverse_direction": false,
+          "family": "screening_invitation"
+        },
+        {
+          "feature": "pop_75plus_rai_assessed_pct",
+          "value": 17.299999999999997,
+          "shap_value": -0.32952639669571704,
+          "abs_shap": 0.32952639669571704,
+          "national_median": null,
+          "adverse_direction": true,
+          "family": "rai_g8"
+        },
+        {
+          "feature": "higher_education_pct",
+          "value": 29.2,
+          "shap_value": 0.25327042938155925,
+          "abs_shap": 0.25327042938155925,
+          "national_median": 30.7,
+          "adverse_direction": true,
+          "family": "education_literacy"
+        }
+      ],
+      "intake_risk_flags": {
+        "public_care_track": true,
+        "high_symptom_severity": true,
+        "frail_or_older": true,
+        "missing_staging_fields": [],
+        "lives_alone": true,
+        "needs_interpreter": false,
+        "smoking_risk": true,
+        "high_travel": true,
+        "already_referred": false
+      },
+      "blind_spots": [
+        "g8_frailty_score",
+        "education_band"
+      ]
+    },
+    "recommended_interventions": {
+      "doctor_micro": [
+        {
+          "target_level": "doctor_micro",
+          "action": "Activate a cancer-suspicion fast track: same-week assessment, apply national referral criteria, and order urgent imaging without waiting for a routine non-urgent slot (Kuitunen / strategy 2.5).",
+          "responsible_actor": "Treating GP / primary-care physician; care pathway nurse",
+          "justification": "Estimated primary-care interval 45.5d (benchmark 41d) in Lapland wellbeing services county with GP wait >7d at 39.5% and symptom_severity_score=7.0 on the public care track. Kuitunen's Finnish lung-cancer study attributes 41 of 155 days to primary care; delays arise from appointment access and missed symptoms.",
+          "expected_impact": "Compress primary-care days toward \u226441 and total pathway toward \u2264155 (current estimate 172.1d).",
+          "success_metrics": [
+            "Days from first contact to specialist referral",
+            "Days from referral to first diagnostic imaging",
+            "Whether national cancer-suspicion referral criteria were applied (Y/N)"
+          ],
+          "driver_feature": null,
+          "shap_value": null,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": {
+            "patient_days": 60.5,
+            "primary_care_days": 45.5,
+            "specialist_care_days": 66.1,
+            "total_days": 172.1,
+            "benchmark_total_days": 155.0,
+            "excess_vs_benchmark_days": 17.1
+          },
+          "priority": 1,
+          "metadata": {
+            "trigger": "primary_care_or_severity",
+            "public_care_track": true
+          }
+        },
+        {
+          "target_level": "doctor_micro",
+          "action": "Provide structured symptom-action counselling and a written safety-net plan (when to re-contact, what red flags mean). Use plain-language, health-literacy\u2013adapted materials (strategy 1.3).",
+          "responsible_actor": "Treating clinician with practice nurse / care coordinator",
+          "justification": "Estimated patient-attributable delay 60.5d (benchmark ~50d); age=78. County higher_education_pct=29.2%. Symptom onset reported at 60 days.",
+          "expected_impact": "Shorter patient delay on subsequent symptom episodes; clearer re-contact behaviour if symptoms progress.",
+          "success_metrics": [
+            "Documented safety-net advice in the record",
+            "Time from safety-net trigger to re-contact",
+            "Patient-reported understanding of red flags"
+          ],
+          "driver_feature": null,
+          "shap_value": null,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": {
+            "patient_days": 60.5,
+            "primary_care_days": 45.5,
+            "specialist_care_days": 66.1,
+            "total_days": 172.1,
+            "benchmark_total_days": 155.0,
+            "excess_vs_benchmark_days": 17.1
+          },
+          "priority": 2,
+          "metadata": {
+            "trigger": "patient_delay_or_literacy",
+            "needs_interpreter": false,
+            "education_band": "unknown"
+          }
+        },
+        {
+          "target_level": "doctor_micro",
+          "action": "Complete / document G8 frailty screening now; if G8 < 14 (or clinical frailty), refer for comprehensive geriatric assessment and include functional-capacity findings in the specialist referral (strategy 3.4).",
+          "responsible_actor": "Treating physician; geriatric / geriatric-oncology consult",
+          "justification": "Patient age=78, G8=not yet scored. Strategy 3.4 requires G8 in units treating older cancer patients and functional-capacity data already in primary-care referrals. County RAI coverage is a known regional gap.",
+          "expected_impact": "Treatment intensity matched to function; fewer complications from over- or under-treatment of frail patients; specialist work-up planned with geriatric input.",
+          "success_metrics": [
+            "G8 score recorded before treatment decision",
+            "Geriatric assessment completed when G8 < 14 (Y/N)",
+            "Functional capacity included in referral documentation (Y/N)"
+          ],
+          "driver_feature": null,
+          "shap_value": null,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": {
+            "patient_days": 60.5,
+            "primary_care_days": 45.5,
+            "specialist_care_days": 66.1,
+            "total_days": 172.1,
+            "benchmark_total_days": 155.0,
+            "excess_vs_benchmark_days": 17.1
+          },
+          "priority": 3,
+          "metadata": {
+            "trigger": "frailty_or_age",
+            "g8_frailty_score": null,
+            "age": 78.0,
+            "cognitive_impairment": false
+          }
+        },
+        {
+          "target_level": "doctor_micro",
+          "action": "Close staging documentation gaps before MDT: complete missing clinical stage fields and ensure structured registry notification so diagnostics are not re-ordered or delayed (strategy 3.2 / quality register).",
+          "responsible_actor": "Specialist responsible physician; MDT coordinator",
+          "justification": "Missing staging fields: unspecified staging fields. Incomplete clinical notifications and imaging/report waits drive specialist delay (66.1d vs 58d benchmark). Kuitunen highlights waits for imaging, reports and samples in specialised care.",
+          "expected_impact": "Fewer repeat diagnostics; specialist interval closer to \u226458 days; better stage capture for early-detection monitoring.",
+          "success_metrics": [
+            "Proportion of required staging fields complete at MDT",
+            "Days from referral to treatment start",
+            "Clinical cancer notification completeness for this case"
+          ],
+          "driver_feature": null,
+          "shap_value": null,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": {
+            "patient_days": 60.5,
+            "primary_care_days": 45.5,
+            "specialist_care_days": 66.1,
+            "total_days": 172.1,
+            "benchmark_total_days": 155.0,
+            "excess_vs_benchmark_days": 17.1
+          },
+          "priority": 4,
+          "metadata": {
+            "trigger": "missing_staging_or_specialist_delay",
+            "missing_staging_fields": []
+          }
+        },
+        {
+          "target_level": "doctor_micro",
+          "action": "Document smoking history (pack-years / quit date) and frame this as a lung-suspicion pathway: prioritise urgent chest imaging and apply national respiratory cancer-suspicion referral criteria.",
+          "responsible_actor": "Treating clinician; radiology scheduler",
+          "justification": "smoking_status=former, primary_symptom_cluster=respiratory, severity=7.0 in Lapland wellbeing services county.",
+          "expected_impact": "Faster imaging for high-risk respiratory presentations; clearer documentation for MDT / registry.",
+          "success_metrics": [
+            "Smoking history documented (Y/N)",
+            "Days to chest imaging",
+            "Cancer-suspicion referral criteria applied (Y/N)"
+          ],
+          "driver_feature": null,
+          "shap_value": null,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": {
+            "patient_days": 60.5,
+            "primary_care_days": 45.5,
+            "specialist_care_days": 66.1,
+            "total_days": 172.1,
+            "benchmark_total_days": 155.0,
+            "excess_vs_benchmark_days": 17.1
+          },
+          "priority": 5,
+          "metadata": {
+            "trigger": "smoking_respiratory",
+            "smoking_status": "former"
+          }
+        },
+        {
+          "target_level": "doctor_micro",
+          "action": "Prefer local / telemedicine steps for early work-up where clinically safe; bundle imaging and specialist visits to avoid unnecessary long-distance travel.",
+          "responsible_actor": "Care pathway nurse; treating clinician",
+          "justification": "travel_time_to_care_minutes=95 in Lapland wellbeing services county (>60 min threshold).",
+          "expected_impact": "Lower travel burden and fewer missed appointments for remote patients.",
+          "success_metrics": [
+            "Share of early steps completed locally or via telemed",
+            "Missed-appointment rate"
+          ],
+          "driver_feature": null,
+          "shap_value": null,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": {
+            "patient_days": 60.5,
+            "primary_care_days": 45.5,
+            "specialist_care_days": 66.1,
+            "total_days": 172.1,
+            "benchmark_total_days": 155.0,
+            "excess_vs_benchmark_days": 17.1
+          },
+          "priority": 6,
+          "metadata": {
+            "trigger": "high_travel",
+            "travel_time_to_care_minutes": 95.0
+          }
+        }
+      ],
+      "department_macro": [
+        {
+          "target_level": "department_macro",
+          "action": "Strengthen outreach and care-navigation for people aged 75+ living alone, including proactive symptom checks and social-care linkage into cancer pathways (strategy equality theme: older people; sub-objectives 3.3\u20133.4).",
+          "responsible_actor": "Wellbeing services county home care / older-people services; primary healthcare",
+          "justification": "Elevated 75+ living alone (45.4%) concentrates frailty and delayed help-seeking. Strategy emphasises functional-capacity\u2013guided care and early psychosocial / social-work support for older adults.",
+          "expected_impact": "Earlier presentation among isolated older adults; fewer late-stage diagnoses in the 75+ cohort.",
+          "success_metrics": [
+            "Time from symptom onset to first contact among 75+ living alone",
+            "Share of 75+ cancer patients with a named care coordinator",
+            "Stage I\u2013II diagnosis rate in 75+ residents"
+          ],
+          "driver_feature": "pop_75plus_living_alone_pct",
+          "shap_value": -1.4339526080447698,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": null,
+          "priority": 1,
+          "metadata": {
+            "strategy_family": "living_alone_75plus",
+            "feature_value": 45.4,
+            "shap_value": -1.4339526080447698,
+            "national_median": 44.9,
+            "source": "National Cancer Strategy 2026\u20132035"
+          }
+        },
+        {
+          "target_level": "department_macro",
+          "action": "Scale RAI / functional-capacity assessment coverage for 75+ and introduce the G8 screening tool in all units treating older cancer patients, feeding results into primary-care referrals (strategy sub-objective 3.4).",
+          "responsible_actor": "Wellbeing services county geriatric and oncology services; City of Helsinki / HUS where applicable",
+          "justification": "Low 75+ RAI assessment coverage (17.3%) indicates incomplete geriatric assessment. Strategy 3.4 requires G8 screening, geriatric assessment for abnormal results, and functional-capacity data already in primary care.",
+          "expected_impact": "Treatment plans matched to frailty rather than chronological age; safer diagnostics and fewer avoidable complications in frail patients.",
+          "success_metrics": [
+            "75+ RAI assessment coverage",
+            "Share of older cancer patients screened with G8",
+            "Share of counties offering primary-care consult to a geriatric oncology team"
+          ],
+          "driver_feature": "pop_75plus_rai_assessed_pct",
+          "shap_value": -0.32952639669571704,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": null,
+          "priority": 2,
+          "metadata": {
+            "strategy_family": "rai_g8",
+            "feature_value": 17.299999999999997,
+            "shap_value": -0.32952639669571704,
+            "national_median": null,
+            "source": "National Cancer Strategy 2026\u20132035"
+          }
+        },
+        {
+          "target_level": "department_macro",
+          "action": "Deploy a targeted, multichannel cancer-symptom and screening awareness campaign for lower-education and linguistic-minority residents (strategy sub-objective 1.3 on health literacy).",
+          "responsible_actor": "Wellbeing services county communications & prevention; FICAN; Cancer Society of Finland",
+          "justification": "The county\u2019s higher education share is relatively low (29.2%), which points to socioeconomic and health-literacy risk. Strategy 1.3 links limited literacy to delayed care-seeking and weaker screening participation.",
+          "expected_impact": "Fewer avoidable delays from symptom to first contact; narrower education-linked gaps in screening and outcomes.",
+          "success_metrics": [
+            "Screening participation by education / mother-tongue stratum",
+            "Share of residents recognising key cancer alarm symptoms (survey)",
+            "Median patient delay from symptom onset to first contact"
+          ],
+          "driver_feature": "higher_education_pct",
+          "shap_value": 0.25327042938155925,
+          "region_name": "Lapland wellbeing services county",
+          "pathway_days": null,
+          "priority": 3,
+          "metadata": {
+            "strategy_family": "education_literacy",
+            "feature_value": 29.2,
+            "shap_value": 0.25327042938155925,
+            "national_median": 30.7,
+            "source": "National Cancer Strategy 2026\u20132035"
+          }
+        }
+      ],
+      "primary_target_level": "doctor_micro"
+    },
+    "supporting_evidence": {
+      "validated_sources": [
+        "THL Sotkanet (wellbeing services county indicators)",
+        "Finnish Cancer Registry (screening invitation / cancer index inputs)"
+      ],
+      "strategy_reference": "National Cancer Strategy 2026\u20132035",
+      "evidence_classes": {
+        "validated_thl_fcr": "Observed county indicators and cancer_index_age_std from THL Sotkanet / Finnish Cancer Registry extracts.",
+        "calibrated_projections": "Model predictions, SHAP contributions, and (when present) Kuitunen-calibrated pathway day estimates."
+      },
+      "kuitunen_pathway_benchmarks_days": {
+        "patient_days": 50.0,
+        "primary_care_days": 41.0,
+        "specialist_care_days": 58.0,
+        "total_days": 155.0
+      },
+      "kuitunen_source": "Prof. Outi Kuitunen Finnish lung-cancer pathway study (patient 50d + primary care 41d + specialist 58d = 155d)"
+    },
+    "confidence_and_limitations": {
+      "model": {
+        "best_model": "RandomForestRegressor",
+        "mae_mean": 4.669205999999993,
+        "mae_std": 1.306692622560489,
+        "rmse_mean": 6.296502090961064,
+        "r2_mean": -0.13815145735811496
+      },
+      "data_year_basis": "Latest available county year in training table / Sotkanet extract",
+      "distinction": {
+        "validated_findings": "County indicators and observed cancer_index_age_std come from validated THL Sotkanet / Finnish Cancer Registry inputs in the training extract. Treat these as the evidence baseline.",
+        "calibrated_projections": "Pathway day estimates and doctor_micro triage actions are calibrated projections against Prof. Outi Kuitunen's Finnish lung-cancer pathway benchmarks (50 / 41 / 58 / 155 days), not measured patient timelines."
+      },
+      "limitations": [
+        "GroupKFold CV R\u00b2 can be weak; use predictions for relative prioritisation, not absolute risk labels.",
+        "SHAP explains the fitted model, not causal effects.",
+        "Patient pathway days are heuristic calibrations for triage support, not clinical orders.",
+        "National Cancer Strategy interventions are mapped from adverse SHAP families and require local validation."
+      ]
+    }
+  }
+}

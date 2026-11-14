@@ -1,0 +1,116 @@
+region_id,region_name,year,gp_wait_over_7d_pct,gp_wait_over_3mo_pct,gp_outpatient_visits_per_1000,morbidity_index_age_std,higher_education_pct,pop_75plus_living_alone_pct,pop_75plus_rai_assessed_pct,cr_3620_proportion_of_women_invited_to_cervical_cance,cr_3621_proportion_of_women_invited_to_breast_cancer_,cancer_index_age_std
+965,Central Finland wellbeing services county,2020,,3.3,5582,104.1,30.8,45.8,11.4,67.8,83.7,92.8
+965,Central Finland wellbeing services county,2021,52.1,2.4,7297,104.6,31.2,45.3,11.1,73.7,85.8,94.8
+965,Central Finland wellbeing services county,2022,51.0,0.3,5857,106.1,31.6,45.1,15.6,71.7,84.5,94.4
+965,Central Finland wellbeing services county,2023,55.3,1.3,4685,104.8,32.1,45.0,16.0,67.6,85.3,97.1
+965,Central Finland wellbeing services county,2024,55.2,1.6,4929,104.4,32.3,44.6,,70.7,85.1,92.5
+964,Central Ostrobothnia wellbeing services county,2020,,0.0,4918,103.8,26.2,40.6,22.6,73.8,84.3,93.8
+964,Central Ostrobothnia wellbeing services county,2021,22.8,0.0,7692,106.3,26.7,40.0,21.1,74.6,85.1,103.4
+964,Central Ostrobothnia wellbeing services county,2022,42.3,0.0,5720,103.1,27.0,39.1,19.4,75.1,85.2,101.1
+964,Central Ostrobothnia wellbeing services county,2023,49.5,0.3,5463,104.7,27.4,38.9,19.6,71.9,83.7,106.2
+964,Central Ostrobothnia wellbeing services county,2024,65.0,0.0,5712,101.4,27.7,39.0,,69.2,85.4,99.1
+966,Central Uusimaa wellbeing services county,2020,,0.2,5737,96.2,31.9,44.1,12.5,72.8,76.7,101.8
+966,Central Uusimaa wellbeing services county,2021,16.8,0.0,7918,98.8,32.2,43.6,18.3,72.8,76.9,105.7
+966,Central Uusimaa wellbeing services county,2022,17.9,0.0,5883,96.6,32.6,43.7,19.6,73.5,80.5,100.7
+966,Central Uusimaa wellbeing services county,2023,23.7,0.1,4994,95.0,32.8,43.7,21.7,74.5,80.9,103.0
+966,Central Uusimaa wellbeing services county,2024,32.8,0.0,5203,96.1,32.9,43.5,,75.9,80.5,96.9
+960,City of Helsinki,2020,,0.0,7240,95.5,45.1,52.5,22.9,66.6,72.7,103.6
+960,City of Helsinki,2021,31.1,0.0,7188,97.3,45.4,51.9,22.2,70.8,74.5,107.2
+960,City of Helsinki,2022,42.5,0.4,5825,91.4,45.3,51.7,21.7,69.8,73.4,105.0
+960,City of Helsinki,2023,66.6,0.3,7019,88.8,46.0,51.6,20.3,71.7,72.4,107.7
+960,City of Helsinki,2024,66.5,1.9,9123,88.3,46.2,51.2,,71.4,74.3,103.4
+961,East Uusimaa wellbeing services county,2020,,0.0,4554,92.1,31.5,43.4,16.2,71.9,81.7,103.4
+961,East Uusimaa wellbeing services county,2021,56.1,0.0,6300,94.5,32.0,43.0,17.1,71.5,81.3,108.9
+961,East Uusimaa wellbeing services county,2022,59.3,0.1,4877,90.3,32.5,42.8,18.9,73.4,81.4,105.7
+961,East Uusimaa wellbeing services county,2023,58.1,0.0,4193,88.7,33.0,42.1,21.4,75.8,81.7,105.3
+961,East Uusimaa wellbeing services county,2024,49.7,0.1,4342,87.9,33.2,41.5,,75.7,79.8,103.1
+962,Kainuu wellbeing services county,2020,,0.0,7230,110.1,25.6,46.2,20.0,75.3,85.0,91.2
+962,Kainuu wellbeing services county,2021,21.2,0.0,9452,113.0,25.9,46.6,19.2,77.3,84.9,88.0
+962,Kainuu wellbeing services county,2022,18.8,0.0,9012,113.9,26.2,46.0,20.2,74.9,85.9,93.9
+962,Kainuu wellbeing services county,2023,26.0,0.0,7797,108.0,26.5,46.3,23.1,76.4,84.3,85.9
+962,Kainuu wellbeing services county,2024,27.1,0.0,7383,109.2,26.8,46.1,,78.5,84.1,79.4
+963,Kanta-Häme wellbeing services county,2020,,0.0,5065,99.2,28.8,46.1,22.7,66.4,81.9,96.6
+963,Kanta-Häme wellbeing services county,2021,53.3,0.1,7344,102.7,29.2,45.3,22.3,72.2,83.5,99.0
+963,Kanta-Häme wellbeing services county,2022,52.7,0.0,5864,103.0,29.4,44.9,22.8,72.4,83.4,102.6
+963,Kanta-Häme wellbeing services county,2023,54.0,0.2,4929,105.4,29.8,44.8,24.6,69.1,82.2,107.0
+963,Kanta-Häme wellbeing services county,2024,50.8,0.1,5614,103.8,30.0,44.8,,70.4,83.4,103.2
+967,Kymenlaakso wellbeing services county,2020,,0.2,4202,107.8,26.5,47.4,26.4,72.7,82.7,103.6
+967,Kymenlaakso wellbeing services county,2021,47.9,0.1,5987,112.8,26.9,47.4,25.3,74.1,83.6,108.6
+967,Kymenlaakso wellbeing services county,2022,55.3,0.0,5185,110.4,27.2,47.5,20.4,73.9,83.4,101.9
+967,Kymenlaakso wellbeing services county,2023,56.6,0.0,4398,114.5,27.6,47.2,21.4,76.5,83.5,111.4
+967,Kymenlaakso wellbeing services county,2024,47.8,0.0,4526,108.1,27.9,47.1,,76.5,82.0,100.1
+968,Lapland wellbeing services county,2020,,0.5,6016,114.0,27.6,45.5,13.9,72.9,81.0,96.2
+968,Lapland wellbeing services county,2021,43.1,0.6,7985,113.5,28.1,45.5,14.9,73.3,83.3,95.6
+968,Lapland wellbeing services county,2022,38.6,1.2,6437,111.8,28.5,45.6,19.1,72.4,82.1,104.4
+968,Lapland wellbeing services county,2023,45.3,0.7,5748,109.8,29.0,45.3,23.5,71.8,83.0,101.6
+968,Lapland wellbeing services county,2024,39.5,0.6,6041,110.6,29.2,45.4,,79.9,83.8,89.9
+972,North Karelia wellbeing services county,2020,,0.0,5612,116.9,27.0,47.5,0.4,74.8,84.4,88.5
+972,North Karelia wellbeing services county,2021,12.5,0.0,8228,116.9,27.4,46.6,0.3,72.5,84.7,94.3
+972,North Karelia wellbeing services county,2022,22.5,0.0,6629,111.1,27.8,46.6,10.1,66.5,84.3,96.6
+972,North Karelia wellbeing services county,2023,22.1,0.1,5672,112.5,28.3,46.3,19.7,64.8,83.7,98.7
+972,North Karelia wellbeing services county,2024,21.1,0.1,5671,111.1,28.7,46.1,,68.0,84.2,92.9
+973,North Ostrobothnia wellbeing services county,2020,,5.9,5955,113.0,30.5,43.1,23.9,71.9,84.0,92.9
+973,North Ostrobothnia wellbeing services county,2021,44.3,4.0,8217,116.2,30.9,42.9,24.6,73.5,85.0,100.0
+973,North Ostrobothnia wellbeing services county,2022,53.1,1.6,6181,114.5,31.3,42.7,21.3,73.6,84.9,102.1
+973,North Ostrobothnia wellbeing services county,2023,63.0,4.5,4979,113.8,31.8,42.6,19.3,73.6,84.6,102.7
+973,North Ostrobothnia wellbeing services county,2024,60.9,3.7,4946,113.7,32.1,42.5,,73.6,85.6,97.8
+974,North Savo wellbeing services county,2020,,0.5,6021,120.2,28.9,46.6,2.1,59.5,83.6,94.1
+974,North Savo wellbeing services county,2021,60.6,0.1,8315,122.8,29.4,46.3,3.0,64.2,85.6,104.2
+974,North Savo wellbeing services county,2022,66.2,1.5,7211,121.2,29.8,46.0,12.3,66.1,84.8,94.3
+974,North Savo wellbeing services county,2023,64.6,1.1,6317,119.8,30.3,45.2,18.5,67.4,85.7,94.7
+974,North Savo wellbeing services county,2024,57.9,0.7,6296,115.1,30.7,44.9,,70.0,85.1,93.4
+971,Ostrobothnia wellbeing services county,2020,,0.0,6300,89.2,31.7,41.4,21.6,75.3,83.3,100.7
+971,Ostrobothnia wellbeing services county,2021,39.4,0.0,8674,88.4,31.9,40.7,20.7,76.7,84.6,99.5
+971,Ostrobothnia wellbeing services county,2022,35.7,0.0,7015,88.8,32.1,40.4,18.8,73.8,84.6,99.5
+971,Ostrobothnia wellbeing services county,2023,38.0,0.0,5539,90.2,32.6,39.9,19.4,76.5,83.8,95.7
+971,Ostrobothnia wellbeing services county,2024,43.8,0.5,5373,88.7,32.7,39.6,,72.4,84.9,107.3
+970,Pirkanmaa wellbeing services county,2020,,0.1,5219,100.4,33.6,46.0,17.5,69.4,80.5,97.9
+970,Pirkanmaa wellbeing services county,2021,40.8,0.0,7610,104.4,34.1,45.8,17.4,74.9,83.4,95.4
+970,Pirkanmaa wellbeing services county,2022,40.6,0.1,5795,103.3,34.5,45.3,18.3,72.0,82.3,97.9
+970,Pirkanmaa wellbeing services county,2023,46.6,0.3,5055,103.6,35.1,45.2,19.2,70.8,83.4,101.5
+970,Pirkanmaa wellbeing services county,2024,38.4,0.3,5409,101.8,35.6,45.3,,71.5,83.5,103.6
+975,Päijät-Häme wellbeing services county,2020,,0.4,4434,106.3,27.4,49.6,16.4,67.4,81.2,103.7
+975,Päijät-Häme wellbeing services county,2021,29.8,0.3,5826,107.1,27.8,49.0,16.3,72.9,83.5,105.8
+975,Päijät-Häme wellbeing services county,2022,49.1,0.2,5710,103.7,28.1,48.7,15.8,71.4,82.9,105.4
+975,Päijät-Häme wellbeing services county,2023,51.2,0.0,4240,104.8,28.6,48.5,16.9,70.4,82.9,108.0
+975,Päijät-Häme wellbeing services county,2024,34.3,0.1,4509,101.6,29.0,47.9,,68.9,81.8,102.9
+976,Satakunta wellbeing services county,2020,,0.6,6178,96.3,26.5,46.4,0.7,69.9,84.0,94.9
+976,Satakunta wellbeing services county,2021,28.8,0.4,8396,99.1,26.8,45.8,0.7,73.1,85.8,101.9
+976,Satakunta wellbeing services county,2022,30.9,0.5,6926,100.2,27.1,45.6,5.9,73.0,84.8,101.1
+976,Satakunta wellbeing services county,2023,33.6,0.5,6095,97.5,27.5,45.4,20.7,72.1,85.4,100.2
+976,Satakunta wellbeing services county,2024,31.8,0.3,6378,98.7,27.7,45.1,,71.3,84.9,105.0
+957,South Karelia wellbeing services county,2020,,0.0,6441,108.1,28.0,49.1,15.6,70.9,84.7,103.1
+957,South Karelia wellbeing services county,2021,57.8,0.0,8594,110.3,28.5,48.7,15.1,73.1,85.7,100.3
+957,South Karelia wellbeing services county,2022,61.7,0.0,7296,109.4,28.7,47.9,15.0,70.9,82.5,102.0
+957,South Karelia wellbeing services county,2023,53.3,0.0,6459,109.4,29.1,47.3,15.1,75.7,83.2,105.4
+957,South Karelia wellbeing services county,2024,47.7,0.0,6126,103.8,29.3,47.1,,75.8,83.2,97.2
+958,South Ostrobothnia wellbeing services county,2020,,0.8,5321,109.9,26.2,44.2,4.1,77.6,84.8,100.8
+958,South Ostrobothnia wellbeing services county,2021,45.6,0.0,7596,110.3,26.5,43.8,5.0,77.7,85.8,104.0
+958,South Ostrobothnia wellbeing services county,2022,41.1,0.0,6442,109.2,26.9,43.6,10.5,76.0,85.1,109.9
+958,South Ostrobothnia wellbeing services county,2023,26.1,0.0,6045,106.7,27.2,42.9,15.1,78.7,85.0,100.6
+958,South Ostrobothnia wellbeing services county,2024,38.6,0.0,6458,107.4,27.5,42.2,,82.3,85.0,103.6
+959,South Savo wellbeing services county,2020,,5.1,5756,108.5,26.4,48.0,15.7,73.0,82.6,88.7
+959,South Savo wellbeing services county,2021,43.8,0.1,7659,106.7,26.8,48.1,17.8,73.0,84.4,94.0
+959,South Savo wellbeing services county,2022,55.0,0.2,6545,105.6,27.2,47.7,18.5,77.4,84.0,92.2
+959,South Savo wellbeing services county,2023,57.4,0.0,6355,109.8,27.6,47.3,21.3,83.2,83.9,101.2
+959,South Savo wellbeing services county,2024,50.0,0.6,6394,108.4,27.8,47.3,,82.3,82.2,101.8
+978,Southwest Finland wellbeing services county,2020,,0.3,5665,102.5,32.1,46.7,15.3,72.4,81.7,103.9
+978,Southwest Finland wellbeing services county,2021,52.5,0.1,7899,105.3,32.4,46.3,16.8,74.0,83.6,107.1
+978,Southwest Finland wellbeing services county,2022,55.7,0.0,6401,104.0,32.8,45.7,16.7,74.0,83.4,103.0
+978,Southwest Finland wellbeing services county,2023,52.3,0.0,5307,102.8,33.2,45.3,19.1,77.4,82.4,105.8
+978,Southwest Finland wellbeing services county,2024,39.5,0.1,5405,102.3,33.5,45.3,,77.6,82.7,101.9
+977,Vantaa and Kerava wellbeing services county,2020,,0.4,4480,96.5,31.6,44.6,17.2,69.9,75.9,100.0
+977,Vantaa and Kerava wellbeing services county,2021,32.9,0.2,5459,96.1,31.6,44.0,16.0,70.9,78.4,108.1
+977,Vantaa and Kerava wellbeing services county,2022,29.0,0.6,4903,92.2,31.5,44.0,16.6,68.6,76.8,103.0
+977,Vantaa and Kerava wellbeing services county,2023,58.0,1.1,5527,90.6,31.6,44.3,16.8,71.1,76.2,108.6
+977,Vantaa and Kerava wellbeing services county,2024,70.4,3.0,7995,91.5,31.6,44.7,,70.7,76.7,100.7
+969,West Uusimaa wellbeing services county,2020,,0.3,5189,90.0,41.8,41.9,14.7,68.5,75.0,99.5
+969,West Uusimaa wellbeing services county,2021,49.5,0.5,7377,91.0,42.1,41.8,15.4,71.0,77.4,109.3
+969,West Uusimaa wellbeing services county,2022,49.0,0.8,5420,86.7,42.0,41.9,14.5,71.7,76.5,102.7
+969,West Uusimaa wellbeing services county,2023,48.8,0.3,4410,84.0,42.6,41.7,14.2,73.2,76.2,107.7
+969,West Uusimaa wellbeing services county,2024,36.3,0.1,4446,83.7,42.6,41.9,,73.6,76.1,100.7
+956,Åland,2020,,,5007,53.0,29.2,44.3,8.4,78.2,,99.2
+956,Åland,2021,,,7138,64.4,29.6,43.1,8.0,76.3,,127.4
+956,Åland,2022,,,5846,65.0,29.7,42.1,6.3,77.7,,125.6
+956,Åland,2023,,,4851,62.9,31.4,41.1,6.0,78.3,,101.8
+956,Åland,2024,,,5130,67.7,31.5,40.8,,80.2,,116.7
