@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   analyzePatient,
   fetchHealth,
+  fetchLatestPhonePatient,
   fetchRegions,
   setRecordedMode,
+  startOutboundCall,
+  type PhoneCallStatus,
 } from "./api/client";
 import type {
   HealthResponse,
@@ -13,6 +16,7 @@ import type {
 import type { PatientResponse } from "./api/patient";
 import {
   buildPatientAnalyzeRequest,
+  CHECKUP_CHAT_KEYS,
   checkupChatComplete,
   coerceIntakeValue,
   confirmFields,
@@ -69,6 +73,21 @@ function nextReminderLabel(cadence: ReminderCadence): string {
     day: "numeric",
   });
 }
+type CallScheduleFreq = "off" | "monthly" | "biweekly" | "quarterly";
+const CALL_SCHEDULE_OPTIONS: { value: CallScheduleFreq; label: string }[] = [
+  { value: "off", label: "Off" },
+  { value: "monthly", label: "Monthly" },
+  { value: "biweekly", label: "Every 2 weeks" },
+  { value: "quarterly", label: "Quarterly" },
+];
+const CALL_SCHEDULE_BANNER: Record<
+  Exclude<CallScheduleFreq, "off">,
+  string
+> = {
+  monthly: "Phone check-in schedule saved — next SILTA call in 30 days",
+  biweekly: "Phone check-in schedule saved — next SILTA call in 14 days",
+  quarterly: "Phone check-in schedule saved — next SILTA call in 90 days",
+};
 function Icon({ name }: { name: Route }) {
   return (
     <svg
@@ -166,6 +185,19 @@ export default function App() {
       cadence: ReminderCadence;
       nextLabel: string;
     } | null>(null);
+  const [callScheduleFreq, setCallScheduleFreq] =
+      useState<CallScheduleFreq>("monthly"),
+    [callSchedulePhone, setCallSchedulePhone] = useState(""),
+    [callScheduleSaved, setCallScheduleSaved] = useState<{
+      frequency: Exclude<CallScheduleFreq, "off">;
+      phone: string;
+      banner: string;
+    } | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState(""),
+    [phoneStatus, setPhoneStatus] = useState<PhoneCallStatus>("idle"),
+    [phoneError, setPhoneError] = useState(""),
+    [phoneIncompleteNotice, setPhoneIncompleteNotice] = useState("");
+  const appliedPhoneConversationId = useRef<string | null>(null);
   const [decision, setDecision] = useState<Decision>(null),
     [reviewNote, setReviewNote] = useState(""),
     [audit, setAudit] = useState<string[]>([]),
@@ -274,6 +306,14 @@ export default function App() {
     setReminderEmail("");
     setReminderCadence("monthly");
     setReminderSaved(null);
+    setCallScheduleFreq("monthly");
+    setCallSchedulePhone("");
+    setCallScheduleSaved(null);
+    setPhoneNumber("");
+    setPhoneStatus("idle");
+    setPhoneError("");
+    setPhoneIncompleteNotice("");
+    appliedPhoneConversationId.current = null;
     setReviewNote("");
     setEditing(false);
     setStep(0);
@@ -297,7 +337,7 @@ export default function App() {
         id: crypto.randomUUID(),
         role: "assistant",
         content:
-          "Hi — this is SILTA with your synthetic cancer checkup. How are you today, and how have you been feeling?",
+          "Hello, this is SILTA from the Thriver Care cancer checkup service—an AI checkup assistant supporting your Finnish wellbeing services county. How are you feeling today, and have you noticed any new or lingering symptoms?",
       },
     ]);
     setStatus("SILTA checkup chat started.");
@@ -347,12 +387,23 @@ export default function App() {
           if (!(upd.key in definitions)) continue;
           nextIntake = setField(nextIntake, upd.key, upd.value, true);
         }
-        setIntake(nextIntake);
         setPatient(null);
         setSubmitted(false);
         setDecision(null);
       }
-      // Only unlock Approve after a fuller checkup, not after 1–2 answers.
+      // When the agent marks ready, confirm any leftover FHIR checkup candidates
+      // so the Approve button is not blocked by profile defaults still marked FHIR.
+      if (data.ready_to_submit) {
+        for (const key of CHECKUP_CHAT_KEYS) {
+          const field = nextIntake[key];
+          if (field?.value != null) {
+            nextIntake = setField(nextIntake, key, field.value, true);
+          }
+        }
+      }
+      if (nextIntake !== intake) setIntake(nextIntake);
+      // Unlock Approve once the agent is ready and checkup topics are filled
+      // (backend infers sensible defaults for anything still blank).
       setChatReady(
         Boolean(data.ready_to_submit) && checkupChatComplete(nextIntake),
       );
@@ -438,6 +489,119 @@ export default function App() {
     navigate("simulation");
     setPlaying(true);
   }
+  function applyPhonePatientResult(data: {
+    patient: PatientResponse;
+    intake: Record<string, unknown> | null;
+    notes: string | null;
+    conversation_id: string | null;
+  }) {
+    let next = emptyIntake();
+    const raw = data.intake || {};
+    for (const key of Object.keys(definitions)) {
+      if (!(key in raw) || raw[key] === undefined) continue;
+      next = setField(next, key, raw[key] as Value, true);
+    }
+    next = confirmFields(next);
+    const regionName = String(
+      raw.region_name ||
+        data.patient.predictions_and_gaps.region_name ||
+        "",
+    );
+    const canonical = regions.find((r) => r.region_name === regionName);
+    if (canonical) {
+      setSelected(canonical);
+      setStep(0);
+      setDay(0);
+    }
+    setIntake(next);
+    setPatient(data.patient);
+    setSubmitted(true);
+    setNoteConfirmed(true);
+    setNote(
+      data.notes?.trim() ||
+        "Phone checkup completed with SILTA and sent to the local review inbox.",
+    );
+    setSelectedProposals([]);
+    setDecision(null);
+    setChatStarted(false);
+    setChatReady(false);
+    setPatientTab("checkup");
+    setAudit([
+      `${new Date().toISOString()} · Phone intake · conversation ${data.conversation_id || "unknown"} processed; SILTA analysis submitted to Apotti inbox`,
+    ]);
+    setStatus("Checkup sent to Apotti");
+    setPhoneStatus("done");
+    setPhoneError("");
+    if (data.conversation_id)
+      appliedPhoneConversationId.current = data.conversation_id;
+  }
+  async function callMyPhone(overrideNumber?: string) {
+    const to = (overrideNumber ?? phoneNumber).trim();
+    if (!to) {
+      setPhoneError("Enter a phone number in E.164 format, e.g. +447700900000");
+      return;
+    }
+    setPhoneNumber(to);
+    setPhoneError("");
+    setPhoneStatus("calling");
+    try {
+      await startOutboundCall(to);
+      setPhoneStatus("in_progress");
+      setStatus("Calling your phone…");
+    } catch (e) {
+      setPhoneStatus("error");
+      setPhoneError((e as Error).message);
+    }
+  }
+  useEffect(() => {
+    // Poll Patient + Doctor always; also keep polling on any route while a call
+    // was recently triggered so Apotti is ready the moment you switch tabs.
+    const callLive =
+      phoneStatus === "calling" ||
+      phoneStatus === "in_progress" ||
+      phoneStatus === "processing";
+    if (route !== "patient" && route !== "doctor" && !callLive) return;
+    const tick = async () => {
+      try {
+        const latest = await fetchLatestPhonePatient();
+        const gateStatus = (latest.latest_call_status ||
+          latest.call_status) as PhoneCallStatus;
+        setPhoneStatus(latest.call_status);
+        if (gateStatus === "incomplete") {
+          setPhoneIncompleteNotice(
+            "Call ended early — summary was not sent to the doctor.",
+          );
+          if (latest.conversation_id)
+            appliedPhoneConversationId.current = latest.conversation_id;
+        } else if (latest.call_status === "done") {
+          setPhoneIncompleteNotice("");
+        }
+        if (latest.error) setPhoneError(latest.error);
+        else if (latest.call_status !== "error") setPhoneError("");
+        if (
+          latest.call_status === "done" &&
+          gateStatus !== "incomplete" &&
+          latest.patient &&
+          latest.conversation_id &&
+          latest.conversation_id !== appliedPhoneConversationId.current
+        ) {
+          setPhoneIncompleteNotice("");
+          applyPhonePatientResult({
+            patient: latest.patient,
+            intake: latest.intake,
+            notes: latest.notes,
+            conversation_id: latest.conversation_id,
+          });
+        }
+      } catch (e) {
+        if (route === "patient" || callLive)
+          setPhoneError((e as Error).message);
+      }
+    };
+    void tick();
+    const id = setInterval(() => void tick(), 3000);
+    return () => clearInterval(id);
+  }, [route, regions, phoneStatus]);
   useEffect(() => {
     if (!playing || route !== "simulation") return;
     const timer = setTimeout(() => {
@@ -809,8 +973,8 @@ export default function App() {
                   }
                   onClick={() => setPatientTab("reminders")}
                 >
-                  Reminders
-                  {reminderSaved ? " · on" : ""}
+                  Scheduled Check-Ins
+                  {reminderSaved || callScheduleSaved ? " · on" : ""}
                 </button>
                 <span className="host-muted">Messages · demo</span>
                 <span className="host-muted">Appointments · no records</span>
@@ -836,21 +1000,26 @@ export default function App() {
                     className={patientTab === "reminders" ? "active" : ""}
                     onClick={() => setPatientTab("reminders")}
                   >
-                    Reminders
+                    Scheduled Check-Ins
                   </button>
                 </div>
                 {patientTab === "reminders" ? (
                   <>
                     <div className="patient-compact-title">
                       <span className="eyebrow">{name} · Synthetic case 001</span>
-                      <h1>Check-in reminders</h1>
+                      <h1>Scheduled Check-Ins</h1>
+                      <p className="scheduled-checkins-subtitle">
+                        Choose how often you&apos;d like SILTA to check in on how
+                        you&apos;re feeling.
+                      </p>
                     </div>
                     <div className="patient-extension checkup-reminder-panel">
                       {reminderSaved ? (
                         <div className="checkup-reminder-saved" role="status">
-                          <strong>Reminders on</strong>
+                          <strong>Portal / Email Check-Ins</strong>
                           <p>
-                            SILTA will nudge {reminderSaved.email}{" "}
+                            Portal &amp; email check-ins scheduled — SILTA will
+                            nudge {reminderSaved.email}{" "}
                             {REMINDER_LABELS[reminderSaved.cadence]} to talk with
                             the agent again and stay safe — next ping{" "}
                             {reminderSaved.nextLabel}.
@@ -864,13 +1033,13 @@ export default function App() {
                                 setReminderSaved(null);
                               }}
                             >
-                              Change reminder
+                              Change schedule
                             </button>
                             <button
                               type="button"
                               onClick={() => {
                                 setReminderSaved(null);
-                                setStatus("Reminder cleared.");
+                                setStatus("Portal & email check-ins cleared.");
                               }}
                             >
                               Turn off
@@ -884,7 +1053,9 @@ export default function App() {
                             e.preventDefault();
                             const email = reminderEmail.trim();
                             if (!email || !email.includes("@")) {
-                              setStatus("Enter an email to save the reminder.");
+                              setStatus(
+                                "Enter an email to save portal & email check-ins.",
+                              );
                               return;
                             }
                             const nextLabel = nextReminderLabel(reminderCadence);
@@ -894,17 +1065,16 @@ export default function App() {
                               nextLabel,
                             });
                             setAudit((a) => [
-                              `Email reminder · ${REMINDER_LABELS[reminderCadence]} · next ${nextLabel}`,
+                              `Portal / email check-ins · ${REMINDER_LABELS[reminderCadence]} · next ${nextLabel}`,
                               ...a,
                             ]);
-                            setStatus(
-                              `Reminder saved (${REMINDER_LABELS[reminderCadence]}).`,
-                            );
+                            setStatus("Portal & email check-ins scheduled");
                           }}
                         >
+                          <strong>Portal / Email Check-Ins</strong>
                           <p>
-                            Get optional email nudges to check in with SILTA
-                            again — weekly, monthly, or every few months.
+                            Get optional portal and email nudges to check in with
+                            SILTA again — weekly, monthly, or every few months.
                           </p>
                           <label className="checkup-reminder-field">
                             <span>Email</span>
@@ -939,8 +1109,153 @@ export default function App() {
                           </fieldset>
                           <div className="button-row">
                             <button className="primary" type="submit">
-                              Save reminder
+                              Save check-ins
                             </button>
+                          </div>
+                        </form>
+                      )}
+                    </div>
+                    <div className="patient-extension checkup-reminder-panel phone-schedule-panel">
+                      {callScheduleSaved ? (
+                        <div className="checkup-reminder-saved" role="status">
+                          <strong>Phone Call Check-Ins</strong>
+                          <p>{callScheduleSaved.banner}</p>
+                          <p className="small">
+                            Calling {callScheduleSaved.phone} on the saved
+                            schedule — synthetic demo preference only.
+                          </p>
+                          <div className="button-row">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCallScheduleFreq(callScheduleSaved.frequency);
+                                setCallSchedulePhone(callScheduleSaved.phone);
+                                setCallScheduleSaved(null);
+                              }}
+                            >
+                              Change schedule
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCallScheduleSaved(null);
+                                setCallScheduleFreq("off");
+                                setStatus("Phone check-in schedule cleared.");
+                              }}
+                            >
+                              Turn off
+                            </button>
+                            <button
+                              type="button"
+                              disabled={
+                                phoneStatus === "calling" ||
+                                phoneStatus === "in_progress" ||
+                                phoneStatus === "processing"
+                              }
+                              onClick={() => {
+                                setCallSchedulePhone(callScheduleSaved.phone);
+                                void callMyPhone(callScheduleSaved.phone);
+                              }}
+                            >
+                              Simulate Scheduled Call Now
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <form
+                          className="checkup-reminder-form"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            if (callScheduleFreq === "off") {
+                              setCallScheduleSaved(null);
+                              setStatus("Phone check-in schedule is off.");
+                              return;
+                            }
+                            const phone = (
+                              callSchedulePhone.trim() || phoneNumber.trim()
+                            );
+                            if (!phone || phone.length < 8) {
+                              setStatus(
+                                "Enter a phone number for phone call check-ins.",
+                              );
+                              return;
+                            }
+                            const banner = CALL_SCHEDULE_BANNER[callScheduleFreq];
+                            setCallSchedulePhone(phone);
+                            setPhoneNumber(phone);
+                            setCallScheduleSaved({
+                              frequency: callScheduleFreq,
+                              phone,
+                              banner,
+                            });
+                            setAudit((a) => [
+                              `Phone call check-ins · ${callScheduleFreq} · ${phone}`,
+                              ...a,
+                            ]);
+                            setStatus(banner);
+                          }}
+                        >
+                          <strong>Phone Call Check-Ins</strong>
+                          <p>
+                            Schedule recurring SILTA phone check-ins for when
+                            email nudges are harder to reach.
+                          </p>
+                          <label className="checkup-reminder-field">
+                            <span>Frequency</span>
+                            <select
+                              value={callScheduleFreq}
+                              onChange={(e) =>
+                                setCallScheduleFreq(
+                                  e.target.value as CallScheduleFreq,
+                                )
+                              }
+                            >
+                              {CALL_SCHEDULE_OPTIONS.map((opt) => (
+                                <option key={opt.value} value={opt.value}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                          <label className="checkup-reminder-field">
+                            <span>Phone number</span>
+                            <input
+                              type="tel"
+                              inputMode="tel"
+                              placeholder="+357… / +44…"
+                              value={callSchedulePhone || phoneNumber}
+                              onChange={(e) => {
+                                setCallSchedulePhone(e.target.value);
+                                setPhoneNumber(e.target.value);
+                              }}
+                            />
+                          </label>
+                          <div className="button-row">
+                            <button className="primary" type="submit">
+                              Save Call Schedule
+                            </button>
+                            {callScheduleFreq !== "off" && (
+                              <button
+                                type="button"
+                                disabled={
+                                  phoneStatus === "calling" ||
+                                  phoneStatus === "in_progress" ||
+                                  phoneStatus === "processing" ||
+                                  !(
+                                    callSchedulePhone.trim() ||
+                                    phoneNumber.trim()
+                                  )
+                                }
+                                onClick={() => {
+                                  const phone =
+                                    callSchedulePhone.trim() ||
+                                    phoneNumber.trim();
+                                  void callMyPhone(phone);
+                                }}
+                              >
+                                Simulate Scheduled Call Now
+                              </button>
+                            )}
                           </div>
                         </form>
                       )}
@@ -1013,12 +1328,74 @@ export default function App() {
                             type="button"
                             onClick={() => setPatientTab("reminders")}
                           >
-                            Reminders →
+                            Scheduled Check-Ins →
                           </button>
                         </div>
                       </div>
                     ) : (
                       <div className="patient-extension compact-checkin">
+                        <div className="phone-checkup-card">
+                          <strong>Prefer a phone checkup? Have SILTA call you</strong>
+                          <label className="checkup-reminder-field">
+                            <span>Mobile number</span>
+                            <input
+                              type="tel"
+                              inputMode="tel"
+                              placeholder="+447..."
+                              value={phoneNumber}
+                              disabled={
+                                phoneStatus === "calling" ||
+                                phoneStatus === "in_progress" ||
+                                phoneStatus === "processing"
+                              }
+                              onChange={(e) => setPhoneNumber(e.target.value)}
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            className="primary"
+                            disabled={
+                              phoneStatus === "calling" ||
+                              phoneStatus === "in_progress" ||
+                              phoneStatus === "processing" ||
+                              !phoneNumber.trim()
+                            }
+                            onClick={() => void callMyPhone()}
+                          >
+                            Call My Phone
+                          </button>
+                          <a
+                            className="phone-direct-link"
+                            href="tel:+16412766024"
+                          >
+                            Or call SILTA directly: +1 641 276 6024
+                          </a>
+                          <p className="small phone-checkup-status" role="status">
+                            {phoneStatus === "calling"
+                              ? "Calling your phone…"
+                              : phoneStatus === "in_progress"
+                                ? "Call in progress…"
+                                : phoneStatus === "processing"
+                                  ? "Processing checkup…"
+                                  : phoneStatus === "done"
+                                    ? "Checkup sent to Apotti"
+                                    : phoneStatus === "incomplete"
+                                      ? "Call ended early — nothing sent to Apotti"
+                                      : phoneStatus === "error"
+                                        ? phoneError || "Call failed"
+                                        : "SILTA can call you, or you can dial the number above."}
+                          </p>
+                          {phoneIncompleteNotice && (
+                            <p className="phone-incomplete-notice" role="status">
+                              {phoneIncompleteNotice}
+                            </p>
+                          )}
+                          {phoneError && phoneStatus !== "error" && (
+                            <p className="small" role="alert">
+                              {phoneError}
+                            </p>
+                          )}
+                        </div>
                         <CheckupChat
                           messages={chatMessages}
                           draft={chatDraft}
@@ -1085,13 +1462,22 @@ export default function App() {
               <aside className="workqueue">
                 <h2>Review inbox</h2>
                 <div className="queue-item">
-                  <strong>Synthetic case 001</strong>
+                  <strong>
+                    {patient?.predictions_and_gaps.patient_id ===
+                    "SYNTH-PHONE-001"
+                      ? "Phone checkup"
+                      : "Synthetic case 001"}
+                  </strong>
                   <span>
                     {decision
                       ? decision.replace("_", " ")
                       : submitted
                         ? "Ready for review"
-                        : "Awaiting patient confirmation"}
+                        : phoneStatus === "in_progress" ||
+                            phoneStatus === "calling" ||
+                            phoneStatus === "processing"
+                          ? "Phone checkup in progress"
+                          : "Awaiting patient confirmation"}
                   </span>
                   <small>{name}</small>
                 </div>

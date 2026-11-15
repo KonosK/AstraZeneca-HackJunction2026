@@ -35,8 +35,9 @@ export function CheckupChat({
     return (
       <div className="checkup-chat start">
         <p>
-          Start a natural cancer checkup conversation with SILTA. Talk about how
-          you feel; when the checkup is ready, SILTA will tell you.
+          Start a Thriver Care checkup with SILTA. Talk about how you feel
+          first; when the checkup is ready to share with your care team, SILTA
+          will tell you.
         </p>
         <button className="primary" onClick={onStart}>
           Start cancer checkup

@@ -1767,12 +1767,67 @@ pre {
 .patient-extension.success > p {
   font-size: 13px;
 }
+.scheduled-checkins-subtitle {
+  margin: 6px 0 0;
+  max-width: 36rem;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4a4860;
+  font-weight: 400;
+}
 .checkup-reminder-panel {
   margin-top: 4px;
   padding: 16px 18px;
   border: 1px solid #d5d3e4;
   background: #faf9fd;
   max-width: 480px;
+}
+.phone-schedule-panel {
+  margin-top: 14px;
+}
+.checkup-reminder-field select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid #c8c5d8;
+  background: #fff;
+}
+.phone-checkup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1px solid #d5d3e4;
+  background: #f7f6fb;
+  max-width: 520px;
+}
+.phone-checkup-card > strong {
+  font-size: 14px;
+}
+.phone-checkup-status {
+  margin: 0;
+  color: #4a4860;
+}
+.phone-direct-link {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #3f3b74;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 4px 0;
+}
+.phone-direct-link:hover {
+  color: #5a5599;
+}
+.phone-incomplete-notice {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #7a5b16;
+  background: #fff7e6;
+  border: 1px solid #e8d3a0;
 }
 .checkup-reminder-form,
 .checkup-reminder-saved {
