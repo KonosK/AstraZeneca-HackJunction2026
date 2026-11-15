@@ -63,12 +63,10 @@ class Integration(unittest.TestCase):
    r=self.c.post('/api/voice/stt',content=b'x'*1000,headers={**self.headers,'Content-Type':'audio/webm'})
   self.assertEqual(r.status_code,200);self.assertEqual(r.json()['text'],'Synthetic answer: 95 minutes.')
   self.assertEqual(fake.speech_to_text.convert.call_args.kwargs['model_id'],'scribe_v2')
- def test_private_production_gate(self):
-  import base64
-  with patch.dict(os.environ,{'APP_ENV':'production','DEMO_ACCESS_TOKEN':'test-only-local-password'}):
-   self.assertEqual(self.c.get('/api/oncoflow/health').status_code,401)
-   auth=base64.b64encode(b'demo:test-only-local-password').decode()
-   self.assertEqual(self.c.get('/api/oncoflow/health',headers={'Authorization':'Basic '+auth}).status_code,200)
+ def test_public_demo_has_no_login_gate(self):
+  with patch.dict(os.environ,{'APP_ENV':'production','DEMO_ACCESS_TOKEN':'ignored-after-public-demo'}):
+   self.assertEqual(self.c.get('/api/oncoflow/health').status_code,200)
+   self.assertEqual(self.c.get('/').status_code,200)
  def test_provider_account_check_never_returns_key_or_generates_audio(self):
   fake=MagicMock();fake.user.subscription.get.return_value=type('Subscription',(),{'character_count':100,'character_limit':1000})()
   with patch('server.app.client',return_value=fake):
@@ -84,10 +82,10 @@ class Integration(unittest.TestCase):
   with patch.dict(os.environ,{'ELEVENLABS_API_KEY':' "synthetic-test-only" '}),patch('server.app.ElevenLabs') as sdk:
    client()
   sdk.assert_called_once_with(api_key='synthetic-test-only',timeout=25)
- def test_public_readiness_keeps_production_api_private(self):
+ def test_public_readiness_and_api_remain_open(self):
   with patch.dict(os.environ,{'APP_ENV':'production','DEMO_ACCESS_TOKEN':'','VERCEL':'1'}):
    self.assertEqual(self.c.get('/healthz').json(),{'status':'ok'})
-   self.assertEqual(self.c.get('/api/oncoflow/health').status_code,401)
+   self.assertEqual(self.c.get('/api/oncoflow/health').status_code,200)
  def test_vercel_and_explicit_origins(self):
   with patch.dict(os.environ,{'APP_ORIGINS':'https://custom.example/','VERCEL_URL':'preview.vercel.app','VERCEL_PROJECT_PRODUCTION_URL':'production.vercel.app'}):
    self.assertIn('https://preview.vercel.app',allowed_origins());self.assertIn('https://production.vercel.app',allowed_origins());self.assertIn('https://custom.example',allowed_origins())

@@ -1,0 +1,97 @@
+{
+  "greeting": {
+    "text": "I have this weird lung behind my ear. I'm sorry to hear that. That sounds worrying. And I'm glad you mentioned it. Can you tell me how long you've noticed that lung and whether it's painful or changing in size? Yeah, so it's been about a week and I don't think it changes in size. So it is kind of painful.",
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 3.84,
+        "text": "I have this weird lung behind my ear."
+      },
+      {
+        "start": 5.84,
+        "end": 8.8,
+        "text": "I'm sorry to hear that. That sounds worrying."
+      },
+      {
+        "start": 8.8,
+        "end": 10.56,
+        "text": "And I'm glad you mentioned it."
+      },
+      {
+        "start": 10.56,
+        "end": 13.0,
+        "text": "Can you tell me how long you've noticed that lung"
+      },
+      {
+        "start": 13.0,
+        "end": 16.580000000000002,
+        "text": "and whether it's painful or changing in size?"
+      },
+      {
+        "start": 16.580000000000002,
+        "end": 18.88,
+        "text": "Yeah, so it's been about a week"
+      },
+      {
+        "start": 18.88,
+        "end": 21.48,
+        "text": "and I don't think it changes in size."
+      },
+      {
+        "start": 21.48,
+        "end": 23.64,
+        "text": "So it is kind of painful."
+      }
+    ]
+  },
+  "symptoms": {
+    "text": "Yeah, that's right, and I am 20 years old. Thank you. Do you usually use a public health center or occupational health? And how far is your nearest clinic from where you live? Yeah, so I used the public one and I live 30 minutes away.",
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.0,
+        "text": "Yeah, that's right, and I am 20 years old."
+      },
+      {
+        "start": 5.0,
+        "end": 11.0,
+        "text": "Thank you. Do you usually use a public health center or occupational health?"
+      },
+      {
+        "start": 11.0,
+        "end": 14.0,
+        "text": "And how far is your nearest clinic from where you live?"
+      },
+      {
+        "start": 14.0,
+        "end": 20.0,
+        "text": "Yeah, so I used the public one and I live 30 minutes away."
+      }
+    ]
+  },
+  "consent": {
+    "text": "Yeah, I live alone. It's not really a barrier that I use public transport but yeah, it's okay. Thank you. Just one more thing. And then I'll wrap up. How are you managing day to day? Things like moving around, appetite, and any weight changes lately? Those are fine. I have a lot of things to think.",
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 8.56,
+        "text": "Yeah, I live alone. It's not really a barrier that I use public transport but yeah, it's okay."
+      },
+      {
+        "start": 8.56,
+        "end": 12.56,
+        "text": "Thank you. Just one more thing. And then I'll wrap up."
+      },
+      {
+        "start": 12.56,
+        "end": 19.0,
+        "text": "How are you managing day to day? Things like moving around, appetite, and any weight changes lately?"
+      },
+      {
+        "start": 19.0,
+        "end": 22.8,
+        "text": "Those are fine. I have a lot of things to think."
+      }
+    ]
+  }
+}

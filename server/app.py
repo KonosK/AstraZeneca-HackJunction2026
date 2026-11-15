@@ -1,7 +1,6 @@
 """Same-origin synthetic demo server. Credentials never reach the browser."""
 from __future__ import annotations
 import io
-import base64
 import json
 import os
 import re
@@ -90,6 +89,12 @@ def allowed_origins():
     public_url = os.getenv('RENDER_EXTERNAL_URL', '').strip().rstrip('/')
     if public_url.startswith('https://'):
         origins.add(public_url)
+    railway_url = os.getenv('RAILWAY_STATIC_URL', '').strip().rstrip('/')
+    if railway_url.startswith('https://'):
+        origins.add(railway_url)
+    railway_host = os.getenv('RAILWAY_PUBLIC_DOMAIN', '').strip()
+    if railway_host and '/' not in railway_host:
+        origins.add('https://' + railway_host)
     for name in ('VERCEL_URL', 'VERCEL_PROJECT_PRODUCTION_URL'):
         host = os.getenv(name, '').strip()
         if host and '/' not in host and host.endswith('.vercel.app'):
@@ -98,17 +103,7 @@ def allowed_origins():
 
 @app.middleware('http')
 async def protect_voice(request: Request, call_next):
-    if (os.getenv('APP_ENV') == 'production' or os.getenv('VERCEL') == '1') and request.url.path != '/healthz':
-        password = os.getenv('DEMO_ACCESS_TOKEN', '')
-        authorized = False
-        try:
-            scheme, encoded = request.headers.get('authorization', '').split(' ', 1)
-            user, supplied = base64.b64decode(encoded, validate=True).decode().split(':', 1)
-            authorized = scheme.lower() == 'basic' and user == 'demo' and bool(password) and secrets.compare_digest(supplied, password)
-        except (ValueError, UnicodeDecodeError):
-            pass
-        if not authorized:
-            return JSONResponse({'detail': 'Private synthetic demo access required'}, status_code=401, headers={'WWW-Authenticate': 'Basic realm="Thriver synthetic demo"'})
+    # Public demo: no login / Basic-auth gate. Voice POSTs still use origin + CSRF + rate limits.
     if request.url.path.startswith('/api/voice') and request.method == 'POST':
         if request.headers.get('origin') not in allowed_origins():
             return JSONResponse({'detail': 'Voice origin is not allowed'}, status_code=403)

@@ -1,0 +1,90 @@
+{
+  "text": " How have this weird alarm behind my ear? I'm sorry to hear that. That sounds worrying. And I'm glad you mentioned it. Can you tell me how long you've noticed that alarm and whether it's painful or changing in size? Yeah, so it's been about a week and I don't think it changes in size. So it is kind of painful. Yeah, that's right. And I am 20 years old. Thank you. Do you usually use a public health center or occupational health and how far is your nearest clinic from where you live? Yeah, so I used the public one and I live 30 minutes away. Yeah, I live alone. It's not really a barrier that I use public transport but...",
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 3.68,
+      "text": " How have this weird alarm behind my ear?"
+    },
+    {
+      "start": 5.68,
+      "end": 7.28,
+      "text": " I'm sorry to hear that."
+    },
+    {
+      "start": 7.28,
+      "end": 8.64,
+      "text": " That sounds worrying."
+    },
+    {
+      "start": 8.64,
+      "end": 10.4,
+      "text": " And I'm glad you mentioned it."
+    },
+    {
+      "start": 10.4,
+      "end": 12.84,
+      "text": " Can you tell me how long you've noticed that alarm"
+    },
+    {
+      "start": 12.84,
+      "end": 15.44,
+      "text": " and whether it's painful or changing in size?"
+    },
+    {
+      "start": 16.4,
+      "end": 18.72,
+      "text": " Yeah, so it's been about a week"
+    },
+    {
+      "start": 18.72,
+      "end": 21.32,
+      "text": " and I don't think it changes in size."
+    },
+    {
+      "start": 21.32,
+      "end": 23.48,
+      "text": " So it is kind of painful."
+    },
+    {
+      "start": 25.080000000000002,
+      "end": 26.52,
+      "text": " Yeah, that's right."
+    },
+    {
+      "start": 26.52,
+      "end": 28.2,
+      "text": " And I am 20 years old."
+    },
+    {
+      "start": 29.2,
+      "end": 30.2,
+      "text": " Thank you."
+    },
+    {
+      "start": 30.2,
+      "end": 34.64,
+      "text": " Do you usually use a public health center or occupational health"
+    },
+    {
+      "start": 34.64,
+      "end": 38.2,
+      "text": " and how far is your nearest clinic from where you live?"
+    },
+    {
+      "start": 38.2,
+      "end": 43.4,
+      "text": " Yeah, so I used the public one and I live 30 minutes away."
+    },
+    {
+      "start": 43.4,
+      "end": 45.72,
+      "text": " Yeah, I live alone."
+    },
+    {
+      "start": 45.72,
+      "end": 50.96,
+      "text": " It's not really a barrier that I use public transport but..."
+    }
+  ]
+}

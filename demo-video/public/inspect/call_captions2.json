@@ -1,0 +1,112 @@
+{
+  "open": {
+    "text": "Hello, this is Silva from the Thriveur Care Cancer Checkup Service, an AI checkup assistant supporting your Finnish well-being services county. How are you feeling today? And have you noticed any new or lingering symptoms? Hello, so I have this weird lung behind my ear.",
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 9.38,
+        "text": "Hello, this is Silva from the Thriveur Care Cancer Checkup Service, an AI checkup assistant"
+      },
+      {
+        "start": 9.38,
+        "end": 12.54,
+        "text": "supporting your Finnish well-being services county."
+      },
+      {
+        "start": 12.54,
+        "end": 14.02,
+        "text": "How are you feeling today?"
+      },
+      {
+        "start": 14.02,
+        "end": 17.06,
+        "text": "And have you noticed any new or lingering symptoms?"
+      },
+      {
+        "start": 17.06,
+        "end": 24.82,
+        "text": "Hello, so I have this weird lung behind my ear."
+      }
+    ]
+  },
+  "mid_sym": {
+    "text": "fever, night sweats or unusual tiredness along with it? I was really five out of turn. I haven't noticed anything else. That's helpful to know. Thank you. A painful lump that stayed about the same for a week without other symptoms is worth having a clinician look at. But I can't say what it is. Have you been able to show it to anyone like your health center or a nurse? No, I'll have no...",
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 4.56,
+        "text": "fever, night sweats or unusual tiredness along with it?"
+      },
+      {
+        "start": 4.56,
+        "end": 11.44,
+        "text": "I was really five out of turn. I haven't noticed anything else."
+      },
+      {
+        "start": 11.44,
+        "end": 16.72,
+        "text": "That's helpful to know. Thank you. A painful lump that stayed about the same for a week"
+      },
+      {
+        "start": 16.72,
+        "end": 22.4,
+        "text": "without other symptoms is worth having a clinician look at. But I can't say what it is."
+      },
+      {
+        "start": 22.4,
+        "end": 26.6,
+        "text": "Have you been able to show it to anyone like your health center or a nurse?"
+      },
+      {
+        "start": 26.6,
+        "end": 31.04,
+        "text": "No, I'll have no..."
+      }
+    ]
+  },
+  "late": {
+    "text": "Lapland using the Public Health Center about 30 minutes away, living alone, and you've had a painful lump behind your ear for about a week, rated five out of ten with no other symptoms. Would it be all right if I share this check-up summary with your care team for a human review only? Yeah, that's fine. Thank you. I am sending your check-up summary to your care team now. Great, thank you. You're welcome and take care of yourself. If the lump gets more painful, grows, or you start feeling unwell, please reach out to your health center. Okay, thanks.",
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 4.88,
+        "text": "Lapland using the Public Health Center about 30 minutes away, living alone, and"
+      },
+      {
+        "start": 4.88,
+        "end": 9.4,
+        "text": "you've had a painful lump behind your ear for about a week, rated five out of"
+      },
+      {
+        "start": 9.4,
+        "end": 13.56,
+        "text": "ten with no other symptoms. Would it be all right if I share this check-up"
+      },
+      {
+        "start": 13.56,
+        "end": 20.04,
+        "text": "summary with your care team for a human review only? Yeah, that's fine. Thank you."
+      },
+      {
+        "start": 20.04,
+        "end": 26.44,
+        "text": "I am sending your check-up summary to your care team now. Great, thank you."
+      },
+      {
+        "start": 26.94,
+        "end": 31.72,
+        "text": "You're welcome and take care of yourself. If the lump gets more painful,"
+      },
+      {
+        "start": 31.72,
+        "end": 37.28,
+        "text": "grows, or you start feeling unwell, please reach out to your health center. Okay,"
+      },
+      {
+        "start": 37.28,
+        "end": 39.8,
+        "text": "thanks."
+      }
+    ]
+  }
+}

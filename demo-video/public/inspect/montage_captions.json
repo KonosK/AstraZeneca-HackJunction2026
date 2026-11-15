@@ -1,0 +1,40 @@
+{
+  "text": "Hello, this is Silva from the Thrive or Care Cancer Checkup Service. An AI checkup that's state about the same for a week without other symptoms is worth having a clinician look at. But I can't say symptoms. Would it be alright if I share this checkup summary with your care team for a human review only? Yeah, that's fine. Thank you. I am sending your checkup summary to your care team now.",
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 8.0,
+      "text": "Hello, this is Silva from the Thrive or Care Cancer Checkup Service."
+    },
+    {
+      "start": 8.0,
+      "end": 14.0,
+      "text": "An AI checkup that's state about the same for a week without other symptoms is worth having a clinician look at."
+    },
+    {
+      "start": 14.0,
+      "end": 16.0,
+      "text": "But I can't say symptoms."
+    },
+    {
+      "start": 16.0,
+      "end": 21.0,
+      "text": "Would it be alright if I share this checkup summary with your care team for a human review only?"
+    },
+    {
+      "start": 21.0,
+      "end": 23.0,
+      "text": "Yeah, that's fine."
+    },
+    {
+      "start": 23.0,
+      "end": 25.0,
+      "text": "Thank you."
+    },
+    {
+      "start": 25.0,
+      "end": 28.0,
+      "text": "I am sending your checkup summary to your care team now."
+    }
+  ]
+}
