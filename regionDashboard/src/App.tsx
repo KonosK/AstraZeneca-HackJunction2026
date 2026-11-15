@@ -13,6 +13,8 @@ import type {
 import type { PatientResponse } from "./api/patient";
 import {
   buildPatientAnalyzeRequest,
+  checkupChatComplete,
+  coerceIntakeValue,
   confirmFields,
   definitions,
   emptyIntake,
@@ -32,8 +34,11 @@ import {
   type Decision,
 } from "./domain/scenario";
 import { featureLabel, formatNumber, shortCountyName } from "./lib/metrics";
-import { VoiceInput } from "./views/VoiceInput";
 import { RegionalDashboard } from "./views/RegionalDashboard";
+import {
+  CheckupChat,
+  type ChatMessage,
+} from "./views/CheckupChat";
 import { routeReview, DEFAULT_POLICY } from "./domain/routing";
 import "./demo.css";
 type Route = "simulation" | "patient" | "doctor" | "dashboard";
@@ -47,6 +52,23 @@ const displayAnswer = (v: Value) =>
         : "No"
       : String(v).replaceAll("_", " ");
 const title = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+type ReminderCadence = "weekly" | "monthly" | "quarterly";
+const REMINDER_LABELS: Record<ReminderCadence, string> = {
+  weekly: "every week",
+  monthly: "every month",
+  quarterly: "every 3 months",
+};
+function nextReminderLabel(cadence: ReminderCadence): string {
+  const d = new Date();
+  if (cadence === "weekly") d.setDate(d.getDate() + 7);
+  else if (cadence === "monthly") d.setMonth(d.getMonth() + 1);
+  else d.setMonth(d.getMonth() + 3);
+  return d.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
 function Icon({ name }: { name: Route }) {
   return (
     <svg
@@ -127,8 +149,23 @@ export default function App() {
     [analyzing, setAnalyzing] = useState(false),
     [submitted, setSubmitted] = useState(false),
     [note, setNote] = useState(""),
-    [noteConfirmed, setNoteConfirmed] = useState(false),
-    [demoSample, setDemoSample] = useState(false);
+    [noteConfirmed, setNoteConfirmed] = useState(false);
+  const [chatStarted, setChatStarted] = useState(false),
+    [chatMessages, setChatMessages] = useState<ChatMessage[]>([]),
+    [chatDraft, setChatDraft] = useState(""),
+    [chatBusy, setChatBusy] = useState(false),
+    [chatReady, setChatReady] = useState(false);
+  const [patientTab, setPatientTab] = useState<"checkup" | "reminders">(
+      "checkup",
+    ),
+    [reminderEmail, setReminderEmail] = useState(""),
+    [reminderCadence, setReminderCadence] =
+      useState<ReminderCadence>("monthly"),
+    [reminderSaved, setReminderSaved] = useState<{
+      email: string;
+      cadence: ReminderCadence;
+      nextLabel: string;
+    } | null>(null);
   const [decision, setDecision] = useState<Decision>(null),
     [reviewNote, setReviewNote] = useState(""),
     [audit, setAudit] = useState<string[]>([]),
@@ -139,9 +176,6 @@ export default function App() {
     [day, setDay] = useState(0),
     [playing, setPlaying] = useState(false),
     [status, setStatus] = useState(""),
-    [session, setSession] = useState(0),
-    [cadence, setCadence] = useState(7),
-    [language, setLanguage] = useState("en"),
     [recorded, setRecorded] = useState(false);
   const generation = useRef(0),
     main = useRef<HTMLElement | null>(null);
@@ -217,10 +251,6 @@ export default function App() {
       "Answers changed. Previous analysis and review are invalid; confirm and run again.",
     );
   }
-  function update(key: string, value: Value, resolve = false) {
-    invalidate();
-    setIntake((s) => setField(s, key, value, resolve));
-  }
   function chooseRegion(r: RegionSummary) {
     if (r.region_id === selected?.region_id) return;
     invalidate();
@@ -230,53 +260,144 @@ export default function App() {
     setPlaying(false);
     setIntake((s) => setField(s, "region_name", r.region_name, true));
   }
-  function loadFixture() {
-    invalidate();
-    let s = extractFhir(syntheticBundle);
-    if (selected) s = setField(s, "region_name", selected.region_name, true);
-    setIntake(s);
-    setStatus(
-      "Synthetic FHIR loaded. Confirm the extracted facts and answer the missing questions.",
-    );
-  }
-  function preset() {
-    invalidate();
-    let s = extractFhir(syntheticBundle);
-    if (selected) s = setField(s, "region_name", selected.region_name, true);
-    s = setField(s, "symptom_severity_score", 7, true);
-    s = setField(s, "travel_time_to_care_minutes", 95, true);
-    s = setField(s, "language", "fi", true);
-    setIntake(s);
-    setNote(
-      "I have felt tired and have had respiratory symptoms for about 60 days. I live alone, and it takes about 95 minutes to reach care. This is a synthetic demo case.",
-    );
-    setNoteConfirmed(false);
-    setDemoSample(true);
-    setStatus(
-      "Demo operator selected fictional severity 7 and travel estimate 95 minutes. Review and confirm; these values were not inferred.",
-    );
-  }
   function reset() {
     invalidate();
     setIntake(emptyIntake());
     setNote("");
     setNoteConfirmed(false);
-    setDemoSample(false);
+    setChatStarted(false);
+    setChatMessages([]);
+    setChatDraft("");
+    setChatBusy(false);
+    setChatReady(false);
+    setPatientTab("checkup");
+    setReminderEmail("");
+    setReminderCadence("monthly");
+    setReminderSaved(null);
     setReviewNote("");
     setEditing(false);
     setStep(0);
     setDay(0);
     setPlaying(false);
-    setSession((n) => n + 1);
     setStatus("Demo reset. No synthetic answers or review decisions retained.");
+  }
+  function startCheckupChat() {
+    invalidate();
+    let s = extractFhir(syntheticBundle);
+    if (selected) s = setField(s, "region_name", selected.region_name, true);
+    setIntake(s);
+    setNote("");
+    setNoteConfirmed(false);
+    setChatStarted(true);
+    setChatDraft("");
+    setChatReady(false);
+    setPatientTab("checkup");
+    setChatMessages([
+      {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          "Hi — this is SILTA with your synthetic cancer checkup. How are you today, and how have you been feeling?",
+      },
+    ]);
+    setStatus("SILTA checkup chat started.");
+  }
+  async function sendCheckupChat() {
+    const text = chatDraft.trim();
+    if (!text || chatBusy) return;
+    const userMsg: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: text,
+    };
+    const history = [...chatMessages, userMsg];
+    setChatMessages(history);
+    setChatDraft("");
+    setChatBusy(true);
+    setPatientError("");
+    try {
+      const snapshot = Object.fromEntries(
+        Object.entries(intake).map(([k, f]) => [k, f.value]),
+      );
+      const res = await fetch("/api/agent/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          messages: history.map((m) => ({ role: m.role, content: m.content })),
+          intake_snapshot: snapshot,
+          pending_fields: planQuestions(intake),
+        }),
+      });
+      if (!res.ok) {
+        const detail = await res.text();
+        throw Error(detail || `Agent chat failed (${res.status})`);
+      }
+      const data = (await res.json()) as {
+        reply: string;
+        field_updates?: { key: string; value: Value }[];
+        ready_to_submit?: boolean;
+        mode?: string;
+        model?: string | null;
+        error?: string;
+      };
+      let nextIntake = intake;
+      if (data.field_updates?.length) {
+        nextIntake = intake;
+        for (const upd of data.field_updates) {
+          if (!(upd.key in definitions)) continue;
+          nextIntake = setField(nextIntake, upd.key, upd.value, true);
+        }
+        setIntake(nextIntake);
+        setPatient(null);
+        setSubmitted(false);
+        setDecision(null);
+      }
+      // Only unlock Approve after a fuller checkup, not after 1–2 answers.
+      setChatReady(
+        Boolean(data.ready_to_submit) && checkupChatComplete(nextIntake),
+      );
+      setChatMessages((msgs) => [
+        ...msgs,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: data.reply || "Thanks — please continue.",
+        },
+      ]);
+      const spoken = history
+        .filter((m) => m.role === "user")
+        .map((m) => m.content)
+        .join(" ");
+      setNote(spoken);
+    } catch (e) {
+      setPatientError((e as Error).message);
+    } finally {
+      setChatBusy(false);
+    }
   }
   async function submitCheckIn() {
     setPatientError("");
     const run = ++generation.current;
     try {
-      if (!note.trim())
-        throw Error("Add a check-in or use Fill demo check-in.");
-      const confirmedIntake = confirmFields(intake);
+      const transcript = chatMessages
+        .filter((m) => m.role === "user")
+        .map((m) => m.content)
+        .join(" ");
+      const checkInNote = note.trim() || transcript;
+      if (!checkInNote)
+        throw Error("Chat with SILTA first, then confirm and send.");
+      if (!chatStarted) throw Error("Start the SILTA checkup chat first.");
+      setNote(checkInNote);
+      let cleaned = intake;
+      for (const key of Object.keys(definitions)) {
+        const current = cleaned[key]?.value;
+        if (current === null || current === undefined) continue;
+        const coerced = coerceIntakeValue(key, current);
+        if (coerced !== current)
+          cleaned = setField(cleaned, key, coerced, true);
+      }
+      setIntake(cleaned);
+      const confirmedIntake = confirmFields(cleaned);
       const body = buildPatientAnalyzeRequest(
         confirmedIntake,
         regions.map((r) => r.region_name),
@@ -374,11 +495,9 @@ export default function App() {
     }
   }
   const routing = routeReview(intake, !!patient, decision === "accepted");
-  const pending = planQuestions(
-      intake,
-      patient?.predictions_and_gaps.blind_spots,
-    ),
-    name = selected ? shortCountyName(selected.region_name) : "Loading county";
+  const name = selected
+    ? shortCountyName(selected.region_name)
+    : "Loading county";
   const selector = (
     <label className="county-select">
       County context
@@ -532,16 +651,15 @@ export default function App() {
                     <p>
                       {submitted
                         ? "Confirmed intake and analysis are ready; see the mode label. Continue to clinician review."
-                        : "Open the questionnaire, review the synthetic answers, then send a local review draft."}
+                        : "Open the patient portal and talk with SILTA in the checkup chat, then confirm and send."}
                     </p>
                     <button
                       className="primary"
                       onClick={() => {
-                        if (!intake.age.value) loadFixture();
                         navigate("patient");
                       }}
                     >
-                      Open Patient questionnaire →
+                      Open SILTA checkup chat →
                     </button>
                   </div>
                 )}
@@ -675,218 +793,277 @@ export default function App() {
             <div className="host-grid">
               <aside className="patient-sidebar">
                 <strong>Welcome, Demo patient</strong>
-                <span className="host-selected">Tasks & questionnaires</span>
-                <span>Messages · demo</span>
-                <span>Appointments · no records</span>
-                <span>Test results · no records</span>
+                <button
+                  type="button"
+                  className={
+                    patientTab === "checkup" ? "host-selected" : "host-nav"
+                  }
+                  onClick={() => setPatientTab("checkup")}
+                >
+                  Checkup chat
+                </button>
+                <button
+                  type="button"
+                  className={
+                    patientTab === "reminders" ? "host-selected" : "host-nav"
+                  }
+                  onClick={() => setPatientTab("reminders")}
+                >
+                  Reminders
+                  {reminderSaved ? " · on" : ""}
+                </button>
+                <span className="host-muted">Messages · demo</span>
+                <span className="host-muted">Appointments · no records</span>
                 <div className="host-safe">
                   This is a reconstructed portal, not your health record.
                 </div>
               </aside>
               <section className="patient-content">
-                <div className="patient-compact-title">
-                  <span className="eyebrow">{name} · Synthetic case 001</span>
-                  <h1>SILTA check-in</h1>
+                <div className="patient-mobile-tabs" role="tablist" aria-label="Patient sections">
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={patientTab === "checkup"}
+                    className={patientTab === "checkup" ? "active" : ""}
+                    onClick={() => setPatientTab("checkup")}
+                  >
+                    Checkup
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={patientTab === "reminders"}
+                    className={patientTab === "reminders" ? "active" : ""}
+                    onClick={() => setPatientTab("reminders")}
+                  >
+                    Reminders
+                  </button>
                 </div>
-                {submitted ? (
-                  <div className="patient-extension success" role="status">
-                    <h2>
-                      {decision === "accepted"
-                        ? "Reviewed by your care team"
-                        : decision === "more_information"
-                          ? "More information requested"
-                          : decision === "rejected"
-                            ? "Proposal not accepted"
-                            : "Sent for review"}
-                    </h2>
-                    <p>Your confirmed check-in is in the local demo inbox.</p>
-                    <div className="button-row">
-                      <button className="primary" onClick={resumeSimulation}>
-                        Continue simulation →
-                      </button>
-                      <button
-                        onClick={() => {
-                          invalidate();
-                          setStatus(
-                            "Update your answers before sending again.",
-                          );
-                        }}
-                      >
-                        Edit check-in
-                      </button>
+                {patientTab === "reminders" ? (
+                  <>
+                    <div className="patient-compact-title">
+                      <span className="eyebrow">{name} · Synthetic case 001</span>
+                      <h1>Check-in reminders</h1>
                     </div>
-                    <details>
-                      <summary>Submission details</summary>
-                      <p>
-                        Next illustrative check-in: day {3 + cadence}. No
-                        appointment or clinical follow-up is scheduled.{" "}
-                        {recorded
-                          ? "Recorded model fixture, not live inference."
-                          : "Analysis received from the existing backend."}
-                      </p>
-                    </details>
-                  </div>
-                ) : (
-                  <div className="patient-extension compact-checkin">
-                    <div className="demo-fill">
-                      <button
-                        className="primary"
-                        onClick={preset}
-                        disabled={analyzing}
-                      >
-                        Fill demo check-in
-                      </button>
-                      <span>Editable synthetic sample</span>
-                    </div>
-                    <VoiceInput
-                      language={language}
-                      key={session}
-                      text={note}
-                      onText={(text) => {
-                        setNote(text);
-                        setDemoSample(false);
-                        setNoteConfirmed(false);
-                        invalidate();
-                      }}
-                    />
-                    {demoSample && (
-                      <span className="sample-label">
-                        Synthetic sample · not a voice transcription
-                      </span>
-                    )}
-                    <details className="checkin-options">
-                      <summary>Language & check-in settings</summary>
-                      <div className="checkin-settings">
-                        <label>
-                          Prompt language
-                          <select
-                            aria-label="Prompt language"
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
-                          >
-                            <option value="en">English</option>
-                            <option value="fi">Suomi</option>
-                          </select>
-                        </label>
-                        <label>
-                          Demo check-in cadence
-                          <select
-                            aria-label="Demo check-in cadence"
-                            value={cadence}
-                            onChange={(e) => setCadence(Number(e.target.value))}
-                          >
-                            <option value={7}>Every 7 scenario days</option>
-                            <option value={14}>Every 14 scenario days</option>
-                            <option value={30}>Every 30 scenario days</option>
-                          </select>
-                        </label>
-                      </div>
-                    </details>
-                    <details className="intake-form">
-                      <summary>Review or correct record & travel time</summary>
-                      {Object.keys(definitions)
-                        .filter(
-                          (k) =>
-                            definitions[k].required ||
-                            k === "travel_time_to_care_minutes",
-                        )
-                        .map(fieldEditor)}
-                      <p className="small">
-                        Severity is a fictional operator input, not clinical
-                        urgency. All populated values are confirmed by the send
-                        button below; conflicts must be resolved first.
-                      </p>
-                    </details>
-                    <details>
-                      <summary>Additional context & sources</summary>
-                      {Object.keys(definitions)
-                        .filter(
-                          (k) =>
-                            !definitions[k].required &&
-                            k !== "travel_time_to_care_minutes",
-                        )
-                        .map(fieldEditor)}
-                      <p>
-                        Local synthetic FHIR Patient, Encounter and
-                        QuestionnaireResponse · reference date 14 November 2026.
-                        Unknown G8 and absent clinical findings stay unknown.
-                        Staging has not been assessed.
-                      </p>
-                      <p>
-                        Next missing context:{" "}
-                        {pending.map((k) => definitions[k].label).join("; ") ||
-                          "Required context available"}
-                        .
-                      </p>
-                      <button onClick={loadFixture} disabled={analyzing}>
-                        Reload synthetic FHIR
-                      </button>
-                      <label className="upload-label">
-                        Import synthetic Bundle
-                        <input
-                          type="file"
-                          accept=".json,application/json"
-                          aria-label="Import synthetic FHIR Bundle"
-                          onChange={async (e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            try {
-                              if (file.size > 100000)
-                                throw Error("Bundle too large");
-                              const next = extractFhir(
-                                JSON.parse(await file.text()),
-                              );
-                              invalidate();
-                              setIntake(next);
-                            } catch (error) {
-                              setPatientError((error as Error).message);
+                    <div className="patient-extension checkup-reminder-panel">
+                      {reminderSaved ? (
+                        <div className="checkup-reminder-saved" role="status">
+                          <strong>Reminders on</strong>
+                          <p>
+                            SILTA will nudge {reminderSaved.email}{" "}
+                            {REMINDER_LABELS[reminderSaved.cadence]} to talk with
+                            the agent again and stay safe — next ping{" "}
+                            {reminderSaved.nextLabel}.
+                          </p>
+                          <div className="button-row">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setReminderEmail(reminderSaved.email);
+                                setReminderCadence(reminderSaved.cadence);
+                                setReminderSaved(null);
+                              }}
+                            >
+                              Change reminder
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setReminderSaved(null);
+                                setStatus("Reminder cleared.");
+                              }}
+                            >
+                              Turn off
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <form
+                          className="checkup-reminder-form"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            const email = reminderEmail.trim();
+                            if (!email || !email.includes("@")) {
+                              setStatus("Enter an email to save the reminder.");
+                              return;
                             }
+                            const nextLabel = nextReminderLabel(reminderCadence);
+                            setReminderSaved({
+                              email,
+                              cadence: reminderCadence,
+                              nextLabel,
+                            });
+                            setAudit((a) => [
+                              `Email reminder · ${REMINDER_LABELS[reminderCadence]} · next ${nextLabel}`,
+                              ...a,
+                            ]);
+                            setStatus(
+                              `Reminder saved (${REMINDER_LABELS[reminderCadence]}).`,
+                            );
                           }}
-                        />
-                      </label>
-                    </details>
-                    <div className="record-recap">
-                      <strong>
-                        {intake.age.value === null
-                          ? "No record loaded"
-                          : `Age ${intake.age.value} · ${name}`}
-                      </strong>
-                      <span>
-                        Travel:{" "}
-                        {intake.travel_time_to_care_minutes.value ?? "unknown"}{" "}
-                        min · demo severity:{" "}
-                        {intake.symptom_severity_score.value ?? "not entered"}
-                        /10
-                      </span>
+                        >
+                          <p>
+                            Get optional email nudges to check in with SILTA
+                            again — weekly, monthly, or every few months.
+                          </p>
+                          <label className="checkup-reminder-field">
+                            <span>Email</span>
+                            <input
+                              type="email"
+                              autoComplete="email"
+                              placeholder="you@example.com"
+                              value={reminderEmail}
+                              onChange={(e) => setReminderEmail(e.target.value)}
+                              required
+                            />
+                          </label>
+                          <fieldset className="checkup-reminder-cadence">
+                            <legend>How often</legend>
+                            {(
+                              [
+                                ["weekly", "Weekly"],
+                                ["monthly", "Monthly"],
+                                ["quarterly", "Every 3 months"],
+                              ] as const
+                            ).map(([value, label]) => (
+                              <label key={value}>
+                                <input
+                                  type="radio"
+                                  name="reminder-cadence"
+                                  checked={reminderCadence === value}
+                                  onChange={() => setReminderCadence(value)}
+                                />
+                                {label}
+                              </label>
+                            ))}
+                          </fieldset>
+                          <div className="button-row">
+                            <button className="primary" type="submit">
+                              Save reminder
+                            </button>
+                          </div>
+                        </form>
+                      )}
                     </div>
-                    <p className="small consent-copy">
-                      By confirming, you approve this editable reply and the
-                      structured record above for the local simulated care-team
-                      inbox. No external referral is sent.
-                    </p>
-                    <button
-                      className="primary submit-checkin"
-                      disabled={analyzing || !!apiError || !note.trim()}
-                      onClick={() => void submitCheckIn()}
-                    >
-                      {analyzing
-                        ? "Preparing SILTA review…"
-                        : "Confirm & send check-in"}
-                    </button>
-                    {patientError && (
-                      <div className="error-box" role="alert">
-                        {patientError}
+                  </>
+                ) : (
+                  <>
+                    <div className="patient-compact-title">
+                      <span className="eyebrow">{name} · Synthetic case 001</span>
+                      <h1>SILTA checkup chat</h1>
+                    </div>
+                    {submitted && patient ? (
+                      <div className="patient-extension success" role="status">
+                        <h2>Checkup sent</h2>
+                        <div className="checkup-report">
+                          {(() => {
+                            const intakeSnap =
+                              patient.predictions_and_gaps.intake;
+                            const pathway =
+                              patient.predictions_and_gaps
+                                .pathway_days_estimate;
+                            return (
+                              <>
+                                <p>
+                                  Your checkup summary went to the local demo
+                                  care inbox for{" "}
+                                  {shortCountyName(
+                                    patient.predictions_and_gaps.region_name,
+                                  )}
+                                  . Clinical next steps stay with your clinician
+                                  — nothing here is medical advice.
+                                </p>
+                                <p>
+                                  <strong>Summary:</strong> you reported
+                                  severity{" "}
+                                  {String(
+                                    intakeSnap.symptom_severity_score ?? "—",
+                                  )}
+                                  /10
+                                  {intakeSnap.travel_time_to_care_minutes !=
+                                  null
+                                    ? ` · about ${intakeSnap.travel_time_to_care_minutes} min to care`
+                                    : ""}
+                                  {intakeSnap.primary_symptom_cluster &&
+                                  intakeSnap.primary_symptom_cluster !==
+                                    "unknown"
+                                    ? ` · ${String(intakeSnap.primary_symptom_cluster).replaceAll("_", " ")} symptoms`
+                                    : ""}
+                                  . Illustrative pathway estimate ≈{" "}
+                                  {formatNumber(pathway.total_days, 0)} days
+                                  (heuristic, not measured time).
+                                </p>
+                              </>
+                            );
+                          })()}
+                        </div>
                         <div className="button-row">
-                          <button onClick={() => void submitCheckIn()}>
-                            Retry
+                          <button className="primary" onClick={resumeSimulation}>
+                            Continue simulation →
                           </button>
-                          <button onClick={() => activateRecordedReplay(true)}>
-                            Use recorded demo
+                          <button
+                            onClick={() => {
+                              startCheckupChat();
+                              setStatus("Checkup chat restarted.");
+                            }}
+                          >
+                            New checkup
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setPatientTab("reminders")}
+                          >
+                            Reminders →
                           </button>
                         </div>
                       </div>
+                    ) : (
+                      <div className="patient-extension compact-checkin">
+                        <CheckupChat
+                          messages={chatMessages}
+                          draft={chatDraft}
+                          busy={chatBusy || analyzing}
+                          started={chatStarted}
+                          onDraftChange={setChatDraft}
+                          onSend={() => void sendCheckupChat()}
+                          onStart={startCheckupChat}
+                        />
+                        {chatStarted && chatReady && (
+                          <>
+                            <p className="small consent-copy">
+                              SILTA is ready. Approving lets the agent send this
+                              checkup summary to the local demo inbox — not a
+                              real referral.
+                            </p>
+                            <button
+                              className="primary submit-checkin"
+                              disabled={analyzing || chatBusy || !!apiError}
+                              onClick={() => void submitCheckIn()}
+                            >
+                              {analyzing
+                                ? "SILTA is sending…"
+                                : "Approve agent to send"}
+                            </button>
+                          </>
+                        )}
+                        {patientError && (
+                          <div className="error-box" role="alert">
+                            {patientError}
+                            <div className="button-row">
+                              <button onClick={() => void submitCheckIn()}>
+                                Retry analysis
+                              </button>
+                              <button
+                                onClick={() => activateRecordedReplay(true)}
+                              >
+                                Use recorded demo
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
               </section>
             </div>
@@ -949,7 +1126,7 @@ export default function App() {
                         draft.
                       </p>
                       <button onClick={() => navigate("patient")}>
-                        Open Patient questionnaire →
+                        Open SILTA checkup chat →
                       </button>
                     </div>
                   ) : (
@@ -1270,105 +1447,4 @@ export default function App() {
       </main>
     </>
   );
-  function fieldEditor(key: string) {
-    const def = definitions[key],
-      f = intake[key];
-    return (
-      <div
-        className={"field-row " + (f.status === "conflicted" ? "conflict" : "")}
-        key={key}
-      >
-        <label>
-          {def.label}
-          {key === "region_name" ? (
-            <select
-              aria-label={def.label}
-              value={String(f.value ?? "")}
-              onChange={(e) => update(key, e.target.value)}
-            >
-              <option value="">Select county</option>
-              {regions.map((r) => (
-                <option key={r.region_id}>{r.region_name}</option>
-              ))}
-            </select>
-          ) : def.kind === "boolean" ? (
-            <select
-              aria-label={def.label}
-              value={f.value === null ? "" : String(f.value)}
-              onChange={(e) =>
-                update(
-                  key,
-                  e.target.value === "" ? null : e.target.value === "true",
-                )
-              }
-            >
-              <option value="">Unknown</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          ) : def.kind === "enum" ? (
-            <select
-              aria-label={def.label}
-              value={String(f.value ?? "")}
-              onChange={(e) => update(key, e.target.value || null)}
-            >
-              <option value="">Unknown / not recorded</option>
-              {def.options?.map((v) => (
-                <option key={v} value={v}>
-                  {v.replaceAll("_", " ")}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              aria-label={def.label}
-              type={def.kind === "number" ? "number" : "text"}
-              min={def.kind === "number" ? 0 : undefined}
-              max={
-                key === "symptom_severity_score"
-                  ? 10
-                  : key === "g8_frailty_score"
-                    ? 17
-                    : key === "age"
-                      ? 120
-                      : undefined
-              }
-              value={f.value === null ? "" : String(f.value)}
-              onChange={(e) =>
-                update(
-                  key,
-                  e.target.value === ""
-                    ? null
-                    : def.kind === "number"
-                      ? Number(e.target.value)
-                      : e.target.value,
-                )
-              }
-            />
-          )}
-        </label>
-        <small>
-          {f.status} · {f.source} ·{" "}
-          {f.confidence === "derived"
-            ? "derived, verify"
-            : "explicit or unknown"}
-          {f.ref && <span title={f.ref}> · {f.ref}</span>}
-        </small>
-        {f.status === "conflicted" && (
-          <div role="alert">
-            <p>
-              Conflict: record “{String(f.value)}”, new answer “
-              {String(f.alternative)}”. Choose explicitly.
-            </p>
-            <button onClick={() => update(key, f.alternative ?? null, true)}>
-              Use new answer
-            </button>
-            <button onClick={() => update(key, f.value, true)}>
-              Keep recorded value
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
 }

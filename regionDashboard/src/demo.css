@@ -572,10 +572,44 @@ pre {
   font-size: 14px;
   color: #4e4a75;
 }
-.host-selected {
-  border-left: 3px solid #7771b8;
+.host-selected,
+.host-nav {
+  border: 0;
+  border-left: 3px solid transparent;
   padding: 10px;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.host-selected {
+  border-left-color: #7771b8;
   background: #fff9;
+}
+.host-muted {
+  padding: 10px;
+  opacity: 0.75;
+}
+.patient-mobile-tabs {
+  display: none;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+.patient-mobile-tabs button {
+  flex: 1;
+  border: 1px solid #d5d3e4;
+  background: #fff;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.patient-mobile-tabs button.active {
+  border-color: #7771b8;
+  background: #f3f1fa;
+  color: #4e4a75;
+  font-weight: 600;
 }
 .host-safe {
   font-size: 11px;
@@ -1250,6 +1284,9 @@ pre {
   .patient-sidebar {
     display: none;
   }
+  .patient-mobile-tabs {
+    display: flex;
+  }
   .patient-content {
     padding: 23px 16px;
   }
@@ -1730,6 +1767,64 @@ pre {
 .patient-extension.success > p {
   font-size: 13px;
 }
+.checkup-reminder-panel {
+  margin-top: 4px;
+  padding: 16px 18px;
+  border: 1px solid #d5d3e4;
+  background: #faf9fd;
+  max-width: 480px;
+}
+.checkup-reminder-form,
+.checkup-reminder-saved {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.checkup-reminder-form > strong,
+.checkup-reminder-saved > strong {
+  font-size: 14px;
+}
+.checkup-reminder-form > p,
+.checkup-reminder-saved > p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #4a4860;
+}
+.checkup-reminder-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #5c5a78;
+}
+.checkup-reminder-field input {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid #c8c5d8;
+  background: #fff;
+}
+.checkup-reminder-cadence {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+.checkup-reminder-cadence legend {
+  font-size: 12px;
+  color: #5c5a78;
+  margin-bottom: 4px;
+  padding: 0;
+}
+.checkup-reminder-cadence label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
 .silta-review {
   padding: 18px 24px;
 }
@@ -1985,6 +2080,91 @@ pre {
   .compact-intro > p {
     font-size: 11px;
   }
+}
+
+.checkup-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.checkup-chat.start p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5c5a78;
+  max-width: 520px;
+}
+.checkup-chat-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.checkup-thread {
+  max-height: 360px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: #f7f6fb;
+  border: 1px solid #d8d6e8;
+  border-radius: 8px;
+}
+.checkup-bubble {
+  max-width: 90%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #d8d6e8;
+}
+.checkup-bubble.user {
+  align-self: flex-end;
+  background: #ebe8f8;
+  border-color: #c5c0e0;
+}
+.checkup-bubble.assistant {
+  align-self: flex-start;
+}
+.checkup-bubble strong {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6a6788;
+  margin-bottom: 4px;
+}
+.checkup-bubble p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #2f2c4a;
+}
+.checkup-compose {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+.checkup-compose textarea {
+  width: 100%;
+  margin: 0;
+}
+.checkup-report {
+  margin: 14px 0;
+  padding: 12px 0;
+  border-top: 1px solid #d6dfe4;
+}
+.checkup-report .recommendation h3 {
+  font-size: 14px;
+}
+.record-recap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 12px 0;
+  font-size: 12px;
+  color: #5c5a78;
 }
 
 /* Host the original OncoFlow regional shell on the Dashboard route */

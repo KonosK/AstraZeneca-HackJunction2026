@@ -95,6 +95,72 @@ export function emptyIntake(): Intake {
     ]),
   );
 }
+/** Map chat/LLM free text onto allowed intake values. */
+export function coerceIntakeValue(key: string, value: Value): Value {
+  if (value === null || value === undefined) return null;
+  const def = definitions[key];
+  if (!def) return value;
+  if (def.kind === "number") {
+    const n = typeof value === "number" ? value : Number(String(value).match(/-?\d+(?:\.\d+)?/)?.[0]);
+    if (!Number.isFinite(n) || n < 0) return null;
+    if (key === "symptom_severity_score") return Math.min(10, Math.round(n));
+    if (key === "age") return Math.min(120, Math.round(n));
+    if (key === "g8_frailty_score") return Math.min(17, Math.round(n));
+    return n;
+  }
+  if (def.kind === "boolean") {
+    if (typeof value === "boolean") return value;
+    const s = String(value).toLowerCase();
+    if (["yes", "true", "y", "kyllä", "joo"].includes(s)) return true;
+    if (["no", "false", "n", "ei"].includes(s)) return false;
+    return null;
+  }
+  if (def.kind === "enum" && def.options) {
+    const raw = String(value).toLowerCase().trim().replace(/\s+/g, "_");
+    if (def.options.includes(raw)) return raw;
+    if (key === "primary_symptom_cluster") {
+      if (/respir|lung|cough|breath|chest/.test(raw)) return "respiratory";
+      if (/breast/.test(raw)) return "breast";
+      if (/gi|stomach|bowel|abdomen|digest/.test(raw)) return "gi";
+      if (/gyn|uter|ovari|pelvic/.test(raw)) return "gyn";
+      if (/heme|blood|anem|lymph/.test(raw)) return "heme";
+      if (/ear|lump|neck|skin|pain|other|weird/.test(raw)) return "other";
+      return "unknown";
+    }
+    if (key === "smoking_status") {
+      if (/never/.test(raw)) return "never";
+      if (/former|quit|used_to|ex/.test(raw)) return "former";
+      if (/current|smoke|yes/.test(raw)) return "current";
+      return "unknown";
+    }
+    if (key === "care_phase") {
+      if (/pre|first|not_yet/.test(raw)) return "pre_contact";
+      if (/primary|gp|doctor/.test(raw)) return "primary_care";
+      if (/diagnos|scan|test/.test(raw)) return "diagnostics";
+      if (/mdt|team/.test(raw)) return "mdt";
+      if (/treat/.test(raw)) return "treatment";
+      return def.options.includes(String(value)) ? String(value) : "primary_care";
+    }
+    if (key === "sex") {
+      if (/female|woman|f\b/.test(raw)) return "female";
+      if (/male|man|\bm\b/.test(raw)) return "male";
+      if (/other/.test(raw)) return "other";
+      return "unknown";
+    }
+    if (key === "education_band") {
+      if (/low/.test(raw)) return "low";
+      if (/mid|medium/.test(raw)) return "mid";
+      if (/high/.test(raw)) return "high";
+      return "unknown";
+    }
+    return def.options[0] === "unknown" ? "unknown" : null;
+  }
+  if (def.kind === "text") {
+    const s = String(value).trim();
+    return s.length ? s.slice(0, 150) : null;
+  }
+  return value;
+}
 export function setField(
   state: Intake,
   key: string,
@@ -103,19 +169,20 @@ export function setField(
 ): Intake {
   const old = state[key];
   if (!old) throw Error("Unsupported field");
+  const coerced = coerceIntakeValue(key, value);
   const conflict =
     !resolve &&
     old.value !== null &&
     old.source.startsWith("FHIR") &&
-    old.value !== value;
+    old.value !== coerced;
   return {
     ...state,
     [key]: {
-      value: conflict ? old.value : value,
-      alternative: conflict ? value : undefined,
+      value: conflict ? old.value : coerced,
+      alternative: conflict ? coerced : undefined,
       status: conflict
         ? "conflicted"
-        : value === null
+        : coerced === null
           ? "missing"
           : "candidate",
       source: conflict ? old.source : "Manual answer",
@@ -134,22 +201,47 @@ export function confirmFields(state: Intake): Intake {
     ]),
   );
 }
+/** Topics the patient checkup chat should cover before Approve. */
+export const CHECKUP_CHAT_KEYS = [
+  "symptom_severity_score",
+  "primary_symptom_cluster",
+  "symptom_onset_days",
+  "travel_time_to_care_minutes",
+  "lives_alone",
+  "smoking_status",
+] as const;
+
+function needsCheckupChat(f: Field | undefined): boolean {
+  if (!f || f.value === null || f.value === undefined) return true;
+  if (f.status === "conflicted") return true;
+  // Synthetic FHIR candidates still need a gentle spoken confirm.
+  return f.status === "candidate" && f.source.startsWith("FHIR");
+}
+
+export function checkupChatComplete(state: Intake): boolean {
+  return CHECKUP_CHAT_KEYS.every((k) => !needsCheckupChat(state[k]));
+}
+
 export function planQuestions(
   state: Intake,
   blindSpots: string[] = [],
 ): string[] {
-  const required = Object.keys(definitions).filter(
-    (k) => definitions[k].required && state[k]?.status !== "confirmed",
-  );
-  const optional = [
-    ...blindSpots,
-    "travel_time_to_care_minutes",
-    "symptom_onset_days",
-  ].filter(
+  // Required form gaps (missing / conflicted only).
+  const required = Object.keys(definitions).filter((k) => {
+    if (!definitions[k].required) return false;
+    const f = state[k];
+    return !f || f.value === null || f.status === "conflicted";
+  });
+  // Checkup chat: cover/confirm the six core topics (including FHIR candidates).
+  const checkup = CHECKUP_CHAT_KEYS.filter((k) => needsCheckupChat(state[k]));
+  const optional = [...blindSpots].filter(
     (k) =>
-      definitions[k] && !definitions[k].required && state[k]?.value === null,
+      definitions[k] &&
+      !definitions[k].required &&
+      !(CHECKUP_CHAT_KEYS as readonly string[]).includes(k) &&
+      state[k]?.value === null,
   );
-  return [...new Set([...required, ...optional])].slice(0, 2);
+  return [...new Set([...required, ...checkup, ...optional])].slice(0, 6);
 }
 export type FhirResource = {
   resourceType: string;
